@@ -44,8 +44,10 @@ controller =
         symbol = '?'
 
       symbolFontData = @getSymbolFontData symbol
-      data.width = Math.floor height * symbolFontData.sizeRatio
+      data.width = Math.floor(height * symbolFontData.sizeRatio)
       data.src = "fonts/#{@fontGroup}/#{symbolMap[symbol]}.jpg"
+
+    data.symbol = symbol
 
     return data
 
@@ -73,11 +75,20 @@ controller =
     maxHeight = 100
 
     height = Math.min(maxHeight, Math.max(minHeight, 650/count))
+    spaceHalfWidth = Math.floor(height/6)
 
     @$text.empty()
+    newText = "<span style='padding: 0 #{spaceHalfWidth}px;'>" # First tag
     _.each text.split(''), (symbol)=>
       symbolData = @getSymbolData(symbol, height)
-      @$text.append "<img src='#{symbolData.src}' style='height: #{symbolData.height}px; width: #{symbolData.width}px'>"
+      if symbolData.symbol is ' '
+        newText += "</span><span style='padding: 0 #{spaceHalfWidth}px;'>"
+      else
+        newText += "<img src='#{symbolData.src}' style='height: #{symbolData.height}px; width: #{symbolData.width}px'>"
+    newText += '</span>' # Last tag
+
+    @$text.html newText
+
 
   listenTextarea: ->
     $message = $('#message')
