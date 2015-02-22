@@ -38,6 +38,8 @@ controller =
 
     if symbol is ' '
       data.width = Math.floor height/3
+    else if symbol is '\n'
+      data.width = 0
     else
       unless symbol of symbolMap
         symbol = '?'
@@ -99,6 +101,8 @@ controller =
       symbolData = @getSymbolData(symbol, height)
       if symbolData.symbol is ' '
         newText += "</span><span style='padding: 0 #{spaceHalfWidth}px;'>"
+      else if symbolData.symbol is '\n'
+        newText += "</span><br><span style='padding: 0 #{spaceHalfWidth}px;'>"
       else
         newText += "<img src='#{symbolData.src}' style='height: #{symbolData.height}px; width: #{Math.floor symbolData.width}px'>"
     newText += '</span>' # Last tag
