@@ -10,22 +10,31 @@
     <script src="js/vendor/lodash.js"></script>
     <script src="js/main.js"></script>
     <style>
-      #text{
+      .wrapper{
+        display: table;
+        width: 486px;
+        height: 255px;
+        margin: 30px auto;
+        background: #eeebdf;
+      }
+      .text{
+        display: table-cell;
+        vertical-align: middle;
         text-align: center;
         font-size: 0;
       }
-      #text img{
+      .text img{
         width: auto;
       }
-      #text span{
+      .text span{
         display: inline-block;
         padding: 0 10px;
       }
     </style>
   </head>
   <body>
-    <div style="width: 486px; height: 255px; margin: 30px auto; background: #eeebdf; ">
-      <div style="height: 100%;" id="text">
+    <div class="wrapper">
+      <div id="text" class="text">
         <img src="fonts/B.jpg" alt="" style="height: 80px">
         <img src="fonts/U.jpg" alt="" style="height: 80px">
         <img src="fonts/M.jpg" alt="" style="height: 80px">
