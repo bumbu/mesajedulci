@@ -1,0 +1,7 @@
+node_modules/
+TODO.md
+.DS_Store
+public/fonts
+public/js
+app/fonts
+app/tmp

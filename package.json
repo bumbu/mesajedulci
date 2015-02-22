@@ -1,0 +1,35 @@
+{
+  "name": "mesajedulci",
+  "version": "0.0.1",
+  "license": "BSD",
+  "description": "Mesaje dulci",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bumbu/mesajedulci.git"
+  },
+  "bugs": {
+    "url": "hhttps://github.com/bumbu/mesajedulci/issues"
+  },
+  "contributors": [
+    "bumbu alex (http://bumbu.me)"
+  ],
+  "keywords": [
+    "marionette",
+    "marionette.js",
+    "coffee",
+    "coffeescript",
+    "handlebars",
+    "handlebars.js"
+  ],
+  "devDependencies": {
+    "coffee-script": "^1.9.1",
+    "easyimage": "^1.2.2",
+    "gulp": "^3.8.11",
+    "gulp-coffee": "^2.3.1",
+    "gulp-define-module": "^0.1.1",
+    "jquery": "^2.1.3",
+    "lodash": "^2.4.1",
+    "merge-stream": "^0.1.7",
+    "through2": "^0.6.3"
+  }
+}
