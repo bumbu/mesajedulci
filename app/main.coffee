@@ -118,6 +118,9 @@ controller =
       @writeText $message.val()
       console.log $message.val()
 
+    # Render first message
+    @writeText $message.val()
+
   start: ->
     @minHeight = 34
     @maxHeight = 100
