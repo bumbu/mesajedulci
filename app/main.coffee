@@ -11,6 +11,8 @@ controller =
         '?': 'symbol-question'
         '!': 'symbol-exclamation'
         ':': 'symbol-column'
+        '*': 'symbol-star'
+        '=': 'symbol-equal'
 
       for i in [0..9]
         @_symbolMap["#{i}"] = "#{i}"
@@ -121,6 +123,11 @@ controller =
     # Render first message
     @writeText $message.val()
 
+  listenSelect: ->
+    $select = $('#font')
+    $select.on 'change', (el)=>
+      @fontGroup = $(el.currentTarget).val()
+
   start: ->
     @minHeight = 34
     @maxHeight = 100
@@ -131,6 +138,7 @@ controller =
       @$text = $('#text')
       @fontGroup = 'font1'
       @listenTextarea()
+      @listenSelect()
 
 $ ->
   controller.start()
