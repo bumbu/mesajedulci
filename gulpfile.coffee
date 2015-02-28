@@ -7,6 +7,8 @@ through = require 'through2'
 path = require 'path'
 fs = require 'fs'
 _ = require 'lodash'
+exec = require('child_process').execFile
+Q = require('q')
 # Helpers
 randomString = (length=8)->
   id = ""
@@ -79,8 +81,8 @@ gulp.task 'images-process', ->
       easyimage.resize
         src: file.path
         dst: tmpFilePath
-        height: 400
-        quality: 80
+        height: 240
+        quality: 100
       .then (image)->
         # Read image data
         shortName = _.last(file.path.split(path.sep).slice(0, -1)) + '/' + path.basename(file.path)
@@ -105,3 +107,44 @@ gulp.task 'images-process', ->
         console.log err
         cb()
     .pipe gulp.dest './public/fonts'
+
+gulp.task 'images-sprite', ->
+  publicFontsFolder = './public/fonts/'
+
+  folders = fs.readdirSync(publicFontsFolder).filter (folder)->
+    fs.lstatSync(publicFontsFolder + folder).isDirectory()
+
+  # Delete old files
+  folders.forEach (folder)->
+    spritePath = "#{publicFontsFolder}#{folder}/font-sprite.jpg"
+    fs.unlinkSync spritePath
+
+  promisses = []
+  folders.forEach (folder)->
+    folderPath = "#{publicFontsFolder}#{folder}/"
+
+    deferred = Q.defer()
+    exec 'convert', ["#{folderPath}*.jpg", '-quality', 40, '-background', '#efebe2', '-append', "#{folderPath}font-sprite.jpg"], (err, stdout, stderr)->
+      if err?
+        deferred.reject err
+      else
+        deferred.resolve()
+
+      console.log folderPath + ' done'
+
+    promisses.push deferred.promise
+    # console.log "convert #{folderPath}*.jpg -background #eeebdf -append #{folderPath}font-sprite.jpg"
+    # easyimage.exec "convert #{folderPath}*.jpg -background #eeebdf -append #{folderPath}font-sprite.jpg"
+
+  Q.all(promisses)
+  .then ->
+    console.log 'Joinging symbols done'
+
+    convArgs = []
+    folders.forEach (folder)->
+      convArgs.push "#{publicFontsFolder}#{folder}/font-sprite.jpg"
+    convArgs = convArgs.concat ['-background', '#efebe2', '-quality', 40, '+append', "#{publicFontsFolder}fonts-sprite.jpg"]
+    console.log convArgs
+
+    exec 'convert', convArgs, (err, stdout, stderr)->
+      console.log 'Joining fonts done'
