@@ -135,10 +135,13 @@ controller =
     @totalWidth = 486
 
     @loadFontsData =>
-      @$text = $('#text')
+      @$text = $('#message')
       @fontGroup = 'font1'
       @listenTextarea()
       @listenSelect()
+
+      #TODO remove me
+      @writeText 'Supărările iubirii\nSunt ca ploile cu soare:\nRepezi, cu cât mai repezi\nCu atât mai trecătore.'
 
 $ ->
   controller.start()

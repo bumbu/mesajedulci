@@ -9,6 +9,9 @@ fs = require 'fs'
 _ = require 'lodash'
 exec = require('child_process').execFile
 Q = require('q')
+stylus = require('gulp-stylus')
+nib = require('nib')
+livereload = require('gulp-livereload')
 # Helpers
 randomString = (length=8)->
   id = ""
@@ -29,22 +32,35 @@ vendorMap =
 
 gulp.task 'default', ['watchFiles']
 gulp.task 'watchFiles', ['development'], ->
+  livereload.listen auto: true
   # Watch script changes
   watcher_script = gulp.watch ['./app/**/*.coffee'], ['development-script']
   watcher_script.on 'change', (e)->
+    console.log "#{e.type} #{e.path}"
+
+  # Watch style changes
+  watcher_style = gulp.watch('./app/css/**/*.styl', ['development-style'])
+  watcher_style.on 'change', (e)->
     console.log "#{e.type} #{e.path}"
 
 # ########################
 # Development
 # ########################
 
-gulp.task 'development', ['development-script', 'development-vendor']
+gulp.task 'development', ['development-script', 'development-vendor', 'development-style']
 
 # Build scripts
 gulp.task 'development-script', ->
   gulp.src './app/**/*.coffee'
     .pipe coffee({bare: true, join: true})
     .pipe gulp.dest "#{publicFolder}/js"
+    .pipe livereload auto: false
+
+gulp.task 'development-style', ->
+  gulp.src('./app/css/style.styl')
+    .pipe(stylus({use: [nib()], 'include css': true, url: {name: 'url', limit: 32768, paths: [__dirname + '/public/img']}}))
+    .pipe(gulp.dest('./public/css'))
+    .pipe livereload auto: false
 
 # Copy vendor files into public folder
 gulp.task 'development-vendor', ->
