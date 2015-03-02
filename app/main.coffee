@@ -48,7 +48,7 @@ controller =
 
       symbolFontData = @getSymbolFontData symbol
       data.width = height * symbolFontData.sizeRatio # Do not round as we need precision
-      data.src = "fonts/#{@fontGroup}/#{symbolMap[symbol]}.jpg"
+      data.src = "#{URI_ROOT}public/fonts/#{@fontGroup}/#{symbolMap[symbol]}.jpg"
 
     data.symbol = symbol
 
@@ -56,7 +56,7 @@ controller =
 
   loadFontsData: (cb)->
     $.ajax
-      url: 'js/fonts.json'
+      url: "#{URI_ROOT}public/js/fonts.json"
       dataType: 'json'
       success: (@_fontsData)=>
         # Compute size ratio
