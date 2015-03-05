@@ -78,6 +78,10 @@ controller =
     for symbol in text.split('')
       symbolData = @getSymbolData(symbol, height)
       sum += symbolData.width
+
+    # Add one more space as each word is spaced
+    sum += @getSymbolData(' ', height).width
+
     return sum
 
   computeLineHeight: (text)->
@@ -132,9 +136,6 @@ controller =
     newText += '</span>' # Last tag
 
     @$text.html newText
-    @$text.css
-      'margin-left': -spaceHalfWidth
-      'margin-right': -spaceHalfWidth
 
   listenTextarea: ->
     $message = $('#textarea')
