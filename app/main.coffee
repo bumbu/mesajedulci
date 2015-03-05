@@ -25,8 +25,7 @@ controller =
 
   getSymbolFontData: (symbol)->
     symbolMap = @getSymbolMap()
-    fontsData = @getFontsData()
-    fontsData[@fontGroup + '/' + symbolMap[symbol] + '.jpg']
+    @getFontsData()[@fontGroup][symbolMap[symbol]]
 
   getSymbolData: (symbol, height)->
     symbolMap = @getSymbolMap()
@@ -34,6 +33,7 @@ controller =
       src: ''
       width: 0
       height: height
+      index: 0
 
     # Uppercase
     symbol = symbol.toUpperCase()
@@ -49,27 +49,21 @@ controller =
       symbolFontData = @getSymbolFontData symbol
       data.width = height * symbolFontData.sizeRatio # Do not round as we need precision
       data.src = "#{URI_ROOT}public/fonts/#{@fontGroup}/#{symbolMap[symbol]}.jpg"
+      data.index = symbolFontData.index
 
     data.symbol = symbol
 
     return data
 
-  loadFontsData: (cb)->
-    $.ajax
-      url: "#{URI_ROOT}public/js/fonts.json"
-      dataType: 'json'
-      success: (@_fontsData)=>
-        # Compute size ratio
-        @_fontsData = _.mapValues @_fontsData, (value, key)->
-          value.sizeRatio = value.width / value.height
-          value
+  getFontsData: ->
+    unless @_fontsData?
+      @_fontsData = jQuery.parseJSON(FONTS_DATA)
 
-        cb(@_fontsData)
-      error: (jqXHR, textStatus)->
-        alert textStatus
+      # Process data
+      for fontGroupName, fontGroup of @_fontsData
+        for symbolAlias, symbolData of fontGroup
+          symbolData.sizeRatio = symbolData.width / symbolData.height
 
-  getFontsData: (cb)->
-    # Do we need a clone?
     @_fontsData
 
   computeWidth: (text, height=100)->
@@ -79,12 +73,12 @@ controller =
       sum += symbolData.width
     return sum
 
-  computeHeight: (text)->
+  computeLineHeight: (text)->
     # Compute min line height based on widest line
     lines = text.split('\n')
     preliminaryHeight = _.reduce lines, (prev, line)=>
       lineWidth = @computeWidth line, 100 # Compute character width if its height is 100
-      lineHeight = Math.floor(100 * (@totalWidth / lineWidth))
+      lineHeight = (100 * (@totalWidth / lineWidth))
       return if lineHeight < prev then lineHeight else prev
     , Infinity
 
@@ -92,21 +86,40 @@ controller =
     preliminaryHeight = Math.min preliminaryHeight, @totalHeight / lines.length
 
     # Check if height matches limits
-    height = Math.floor Math.min(@maxHeight, Math.max(@minHeight, preliminaryHeight))
+    height = Math.min(@maxHeight, Math.max(@minHeight, preliminaryHeight))
+
+  spriteWidth: ->
+    max = 0
+    for symbolName, symbolData of @getFontsData()[@fontGroup]
+      max = Math.max(max, symbolData.width)
+
+    return max
+
+  maxCharacterWidthByHeight: (height)->
+    max = 0
+    for symbolName, symbolData of @getFontsData()[@fontGroup]
+      max = Math.max(max, symbolData.sizeRatio * height)
+
+    return max
 
   writeText: (text)->
-    height = @computeHeight(text)
-    spaceHalfWidth = Math.floor(@getSymbolData(' ', height).width / 2)
+    lineHeightRaw = @computeLineHeight(text)
+    lineHeight = Math.floor lineHeightRaw
+    spriteWidth = @spriteWidth()
+    maxCharacterWidth = Math.round @maxCharacterWidthByHeight(lineHeight)
+    spaceHalfWidth = Math.floor(@getSymbolData(' ', lineHeight).width / 2)
 
     newText = "<span style='padding: 0 #{spaceHalfWidth}px;'>" # First tag
     _.each text.split(''), (symbol)=>
-      symbolData = @getSymbolData(symbol, height)
+      symbolData = @getSymbolData(symbol, lineHeight)
+      mh = symbolData.index * 240 * maxCharacterWidth / spriteWidth
+
       if symbolData.symbol is ' '
         newText += "</span><span style='padding: 0 #{spaceHalfWidth}px;'>"
       else if symbolData.symbol is '\n'
         newText += "</span><br><span style='padding: 0 #{spaceHalfWidth}px;'>"
       else
-        newText += "<img src='#{symbolData.src}' style='height: #{symbolData.height}px; width: #{Math.floor symbolData.width}px'>"
+        newText += "<i style='width: #{Math.floor symbolData.width}px; height: #{lineHeight}px;'><img style='width:#{maxCharacterWidth}px;margin-top: -#{mh}px' src='#{URI_ROOT}public/fonts/#{@fontGroup}/font-sprite.jpg'></i>"
     newText += '</span>' # Last tag
 
     @$text.html newText
@@ -134,14 +147,15 @@ controller =
     @totalHeight = 255
     @totalWidth = 486
 
-    @loadFontsData =>
-      @$text = $('#message')
-      @fontGroup = 'font1'
-      @listenTextarea()
-      @listenSelect()
+    @$text = $('#message')
+    @fontGroup = 'font1'
+    @listenTextarea()
+    @listenSelect()
 
-      #TODO remove me
-      @writeText 'Supărările iubirii\nSunt ca ploile cu soare:\nRepezi, cu cât mai repezi\nCu atât mai trecătore.'
+    #TODO remove me
+    # @writeText 'Supărările iubirii\nSunt ca ploile cu soare:\nRepezi, cu cât mai repezi\nCu atât mai trecătore.'
+    # @writeText 'Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!'
+    @writeText '0123456789 abcdefghijklmnopqrs :.,=!(-+?)* tuvwxyz'
 
 $ ->
   controller.start()

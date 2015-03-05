@@ -86,7 +86,48 @@ gulp.task 'development-vendor', ->
 # ########################
 imagesJSON = {}
 gulp.task 'images', ['images-process'], ->
-  fs.writeFile './public/js/fonts.json', JSON.stringify(imagesJSON), ->
+  fontsData = {}
+
+  # Find font groups
+  fontGroups = []
+  for symbolKey, symbolData of imagesJSON
+    fontGroup = symbolKey.substr(0, symbolKey.indexOf('/'))
+    unless fontGroup in fontGroups
+      fontGroups.push fontGroup
+      fontsData[fontGroup] = {} # Init fonts data arrays
+
+  for fontGroup in fontGroups
+    fontGroupFolder = "./public/fonts/#{fontGroup}"
+    fontGroupFiles = fs.readdirSync(fontGroupFolder).filter (file)->
+      "#{fontGroup}/#{file}" of imagesJSON
+
+    fontGroupFiles = fontGroupFiles.sort (a, b)->
+      if a.charCodeAt(0) <= 57
+        a = parseInt(a, 10)
+      if b.charCodeAt(0) <= 57
+        b = parseInt(b, 10)
+
+      if _.isNumber(a) and _.isNumber(b)
+        a - b
+      else if _.isNumber(a)
+        -1
+      else if _.isNumber(b)
+        1
+      else
+        a.toLowerCase().localeCompare b.toLowerCase()
+
+    index = -1
+    for file in fontGroupFiles
+      index++
+      symbolData = imagesJSON["#{fontGroup}/#{file}"]
+      symbol = file.substr(0, file.lastIndexOf('.'))
+
+      fontsData[fontGroup][symbol] =
+        width: symbolData.width
+        height: symbolData.height
+        index: index
+
+  fs.writeFile './public/js/fonts.json', JSON.stringify(fontsData), ->
     console.log 'Image data saved into fonts.json'
 
 gulp.task 'images-process', ->
@@ -98,9 +139,13 @@ gulp.task 'images-process', ->
         src: file.path
         dst: tmpFilePath
         height: 240
+        width: 1000 # Set is excesively large so that resize is done by height
         quality: 100
       .then (image)->
         # Read image data
+        fontGroup = _.last(file.path.split(path.sep).slice(0, -1))
+        symbol = path.basename(file.path, path.extname(file.path))
+
         shortName = _.last(file.path.split(path.sep).slice(0, -1)) + '/' + path.basename(file.path)
         imagesJSON[shortName] = _.pick image, 'width', 'height'
 

@@ -149,6 +149,13 @@ a {
   display: inline-block;
   padding: 0 10px;
 }
+.message span i {
+  display: inline-block;
+  overflow: hidden;
+}
+.message span i img {
+  height: auto;
+}
 .footer {
   height: 190px;
   text-align: center;
@@ -209,6 +216,7 @@ a {
 }
 .footer .navigation {
   width: 940px;
+  margin: 0 auto;
 }
 .footer .navigation .action-wrapper,
 .footer .navigation .action,
