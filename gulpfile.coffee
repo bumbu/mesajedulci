@@ -22,9 +22,6 @@ publicFolder = './public'
 vendorMap =
   # jQuery
   './node_modules/jquery/dist/jquery.js': 'jquery.js'
-  # Utilities
-  './node_modules/lodash/dist/lodash.js': 'lodash.js'
-
 
 # ########################
 # Watching

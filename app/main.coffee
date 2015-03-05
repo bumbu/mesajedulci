@@ -68,19 +68,20 @@ controller =
 
   computeWidth: (text, height=100)->
     sum = 0
-    _.each text.split(''), (symbol)=>
+    for symbol in text.split('')
       symbolData = @getSymbolData(symbol, height)
       sum += symbolData.width
     return sum
 
   computeLineHeight: (text)->
     # Compute min line height based on widest line
+    preliminaryHeight = Infinity
     lines = text.split('\n')
-    preliminaryHeight = _.reduce lines, (prev, line)=>
+
+    for line in lines
       lineWidth = @computeWidth line, 100 # Compute character width if its height is 100
       lineHeight = (100 * (@totalWidth / lineWidth))
-      return if lineHeight < prev then lineHeight else prev
-    , Infinity
+      preliminaryHeight = Math.min(preliminaryHeight, lineHeight)
 
     # Compute height based on number of rows
     preliminaryHeight = Math.min preliminaryHeight, @totalHeight / lines.length
@@ -110,16 +111,16 @@ controller =
     spaceHalfWidth = Math.floor(@getSymbolData(' ', lineHeight).width / 2)
 
     newText = "<span style='padding: 0 #{spaceHalfWidth}px;'>" # First tag
-    _.each text.split(''), (symbol)=>
+    for symbol in text.split('')
       symbolData = @getSymbolData(symbol, lineHeight)
-      mh = symbolData.index * 240 * maxCharacterWidth / spriteWidth
+      symbolOffset = symbolData.index * 240 * maxCharacterWidth / spriteWidth
 
       if symbolData.symbol is ' '
         newText += "</span><span style='padding: 0 #{spaceHalfWidth}px;'>"
       else if symbolData.symbol is '\n'
         newText += "</span><br><span style='padding: 0 #{spaceHalfWidth}px;'>"
       else
-        newText += "<i style='width: #{Math.floor symbolData.width}px; height: #{lineHeight}px;'><img style='width:#{maxCharacterWidth}px;margin-top: -#{mh}px' src='#{URI_ROOT}public/fonts/#{@fontGroup}/font-sprite.jpg'></i>"
+        newText += "<i style='width: #{Math.floor symbolData.width}px; height: #{lineHeight}px;'><img style='width:#{maxCharacterWidth}px;margin-top: -#{symbolOffset}px' src='#{URI_ROOT}public/fonts/#{@fontGroup}/font-sprite.jpg'></i>"
     newText += '</span>' # Last tag
 
     @$text.html newText
