@@ -1,3 +1,11 @@
+cleanUpSpecialChars = (str)->
+  str = str.replace(/[àáâãäåă]/gi,"a") # ă, â
+  str = str.replace(/[șşṣṩṧš]/gi,"s") # ș
+  str = str.replace(/[țƫţṭ]/gi,"t") # ț
+  str = str.replace(/[îíǐĭìï]/gi,"i") # î
+
+  return str
+
 controller =
   getSymbolMap: ->
     unless @_symbolMap
@@ -103,6 +111,7 @@ controller =
     return max
 
   writeText: (text)->
+    text = cleanUpSpecialChars(text)
     lineHeightRaw = @computeLineHeight(text)
     lineHeight = Math.floor lineHeightRaw
     spriteWidth = @spriteWidth()
