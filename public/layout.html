@@ -12,7 +12,7 @@
     var URI_ROOT = '<?php echo $uriRoot; ?>';
     var FONTS_DATA = '<?php echo $this->render(Base::instance()->get('fontsFile')); ?>';
     var PRELOADED_MESSAGE = 'Alege-ți zahărul brun preferat\nși scrie un mesaj dulce\ncelor dragi!';
-    var PRELOADED_FONT = 'font1';
+    var PRELOADED_FONT = <?php echo $preloadedFont; ?>;
     </script>
     <link href="<?php echo $uriRoot; ?>public/css/style.css" media="all" rel="stylesheet" />
   </head>
@@ -38,7 +38,13 @@
       </div>
     </div>
     <div class="footer">
-      <?php echo $this->render(Base::instance()->get('footer')); ?>
+      <div class="footer-inner" style="left: -<?php echo $preloadedFooter * 100;?>%">
+
+        <?php echo $this->render(Base::instance()->get('footerShared')); ?>
+        <?php echo $this->render(Base::instance()->get('footerEditor')); ?>
+        <?php echo $this->render(Base::instance()->get('footerShare')); ?>
+
+      </div>
     </div>
   </body>
 </html>

@@ -4,6 +4,9 @@ A started Marionette.js application with many examples written in CoffeeScript a
 
 ## Quick Start
 
+* `gulp images`
+* `gulp images-sprite`
+
 _TODO_
 
 ## Guide

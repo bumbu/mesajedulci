@@ -13,24 +13,24 @@ $f3->config('config.ini');
 
 $f3->set('uriRoot', '/mesajedulci/');
 $f3->set('fontsFile','js/fonts.json');
+$f3->set('preloadedFont', 1);
+
+$f3->set('footerShared','footer-shared.html');
+$f3->set('footerEditor','footer-editor.html');
+$f3->set('footerShare','footer-share.html');
 
 $f3->route('GET /',
 	function($f3) {
-		$f3->set('footer','footer-editor.html');
-		echo View::instance()->render('layout.html');
-	}
-);
-
-$f3->route('GET /distribuie/@message',
-	function($f3) {
-		$f3->set('footer','footer-share.html');
+		$f3->set('preloadedFooter', 1);
 		echo View::instance()->render('layout.html');
 	}
 );
 
 $f3->route('GET /mesaj/@message',
 	function($f3) {
-		$f3->set('footer','footer-shared.html');
+		// If my message show share
+		// If shared with me, show try by yourself
+		$f3->set('preloadedFooter', 2);
 		echo View::instance()->render('layout.html');
 	}
 );

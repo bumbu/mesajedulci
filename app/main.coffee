@@ -177,7 +177,7 @@ controller =
   start: ->
     @$text = $('#message')
 
-    @fontGroup = PRELOADED_FONT
+    @fontGroup = "font#{PRELOADED_FONT}"
     @minHeight = 34
     @maxHeight = 120
     @computeMessageBoxSizes()
@@ -187,5 +187,33 @@ controller =
     @listenSelect()
     @listenResize()
 
+listenForFontChange = (controller)->
+  $('body').on 'click', '[data-action="prev-font"]', =>
+    currentFont = +controller.fontGroup[controller.fontGroup.length - 1]
+    if currentFont is 1
+      newFontIndex = 5
+    else
+      newFontIndex = currentFont - 1
+
+    newFont = "font#{newFontIndex}"
+
+    $('.action-content-inner').animate(left: "-#{(newFontIndex - 1) * 100}%")
+    controller.fontGroup = newFont
+    controller.writeText()
+
+  $('body').on 'click', '[data-action="next-font"]', =>
+    currentFont = +controller.fontGroup[controller.fontGroup.length - 1]
+    if currentFont is 5
+      newFontIndex = 1
+    else
+      newFontIndex = currentFont + 1
+
+    newFont = "font#{newFontIndex}"
+
+    $('.action-content-inner').animate(left: "-#{(newFontIndex - 1) * 100}%")
+    controller.fontGroup = newFont
+    controller.writeText()
+
 $ ->
   controller.start()
+  listenForFontChange controller

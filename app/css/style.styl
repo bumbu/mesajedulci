@@ -47,7 +47,7 @@ a
   height 100%
   width 100%
   padding 150px 0 200px
-  margin -150px 0 -200px
+  margin -150px 0 -350px
   box-sizing border-box
 
 .message
@@ -75,13 +75,28 @@ a
         height auto
 
 .footer
-  height 190px
+  height 350px
   text-align center
+  overflow hidden
+  position relative
+
+  .footer-inner
+    position absolute
+    top 10px + 150px
+    left 0
+    width 300%
+    height @height - 10px
+
+  .footer-block
+    width 33.3%
+    height @height - 10px
+    float left
+
 
   .from-to
     font-size 16px
     height @font-size
-    padding-top 10px
+    // padding-top 10px
     color $c-link
 
     span
@@ -122,6 +137,7 @@ a
     text-decoration none
     color $c-text
     margin 0 40px
+    cursor pointer
 
     &.active,
     &:hover
@@ -159,6 +175,22 @@ a
       margin 0 -37px
       text-align left
       z-index 1
+      overflow hidden
+      height 174px
+
+      .action-content-inner
+        position absolute
+        top 0
+        left 0
+        width 500%
+
+      .content-wrapper
+        width 20%
+        height 174px
+        float left
+        // display none
+        &.active
+          // display block
 
       .caption
         display inline-block
