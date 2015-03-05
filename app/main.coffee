@@ -21,6 +21,8 @@ controller =
         ':': 'symbol-column'
         '*': 'symbol-star'
         '=': 'symbol-equal'
+        '>': 'symbol-bigger'
+        '<': 'symbol-smaller'
 
       for i in [0..9]
         @_symbolMap["#{i}"] = "#{i}"
