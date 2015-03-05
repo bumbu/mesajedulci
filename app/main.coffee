@@ -152,7 +152,7 @@ controller =
       @writeText $message.val()
 
     # Render first message
-    @writeText $message.val()
+    # @writeText $message.val()
 
   listenSelect: ->
     $select = $('#font')
@@ -165,7 +165,6 @@ controller =
         clearTimeout @resizeTimeout
 
       @resizeTimeout = setTimeout =>
-        console.log 'r'
         @computeMessageBoxSizes()
         @writeText()
       , 300
@@ -178,19 +177,15 @@ controller =
   start: ->
     @$text = $('#message')
 
-    @fontGroup = 'font1'
+    @fontGroup = PRELOADED_FONT
     @minHeight = 34
     @maxHeight = 120
     @computeMessageBoxSizes()
 
+    @writeText PRELOADED_MESSAGE
     @listenTextarea()
     @listenSelect()
     @listenResize()
-
-    #TODO remove me
-    # @writeText 'Supărările iubirii\nSunt ca ploile cu soare:\nRepezi, cu cât mai repezi\nCu atât mai trecătore.'
-    # @writeText 'Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!'
-    # @writeText '0123456789 abcdefghijklmnopqrs :.,=!(-+?)* tuvwxyz'
 
 $ ->
   controller.start()
