@@ -31,7 +31,9 @@
       <div class="logo"><a href="#"><img src="<?php echo $uriRoot; ?>public/img/logo.jpg" alt="" width="179" height="91"></a></div>
     </div>
     <div class="message-wrapper">
-      <div class="message" id="message"></div>
+      <div class="message">
+        <div class="message-body" id="message"></div>
+      </div>
     </div>
     <div class="footer">
       <?php echo $this->render(Base::instance()->get('footer')); ?>

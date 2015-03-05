@@ -3,6 +3,7 @@ TODO.md
 .DS_Store
 public/fonts
 public/js
+public/css
 app/fonts
 app/_fonts
 app/tmp

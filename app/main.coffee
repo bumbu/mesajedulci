@@ -48,7 +48,6 @@ controller =
 
       symbolFontData = @getSymbolFontData symbol
       data.width = height * symbolFontData.sizeRatio # Do not round as we need precision
-      data.src = "#{URI_ROOT}public/fonts/#{@fontGroup}/#{symbolMap[symbol]}.jpg"
       data.index = symbolFontData.index
 
     data.symbol = symbol
@@ -126,13 +125,12 @@ controller =
     @$text.html newText
     @$text.css
       'margin-left': -spaceHalfWidth
-      'margin-right2': -spaceHalfWidth
+      'margin-right': -spaceHalfWidth
 
   listenTextarea: ->
-    $message = $('#message')
-    $message.on 'keyup paste change', (el)=>
+    $message = $('#textarea')
+    $message.on 'keyup paste cut change', (el)=>
       @writeText $message.val()
-      console.log $message.val()
 
     # Render first message
     @writeText $message.val()
@@ -156,7 +154,7 @@ controller =
     #TODO remove me
     # @writeText 'Supărările iubirii\nSunt ca ploile cu soare:\nRepezi, cu cât mai repezi\nCu atât mai trecătore.'
     # @writeText 'Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!'
-    @writeText '0123456789 abcdefghijklmnopqrs :.,=!(-+?)* tuvwxyz'
+    # @writeText '0123456789 abcdefghijklmnopqrs :.,=!(-+?)* tuvwxyz'
 
 $ ->
   controller.start()
