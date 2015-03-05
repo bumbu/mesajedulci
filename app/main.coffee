@@ -221,20 +221,18 @@ listenForFontChange = (controller)->
     controller.writeText()
 
 listenForFromToChange = (controller)->
-  $createFrom = $('#create-from') # inpute
+  $createFrom = $('#create-from') # input
   $editFrom = $('#edit-from')
-  $createTo = $('#create-to') # inpute
+  $createTo = $('#create-to') # input
   $editTo = $('#edit-to')
 
   $createFrom.on 'input paste keyup cut change', ->
-    console.log $createFrom.val()
     if $createFrom.val()
       $editFrom.show().find('strong').text $createFrom.val()
     else
       $editFrom.hide().find('strong').text ''
 
   $createTo.on 'input paste keyup cut change', ->
-    console.log $createTo.val()
     if $createTo.val()
       $editTo.show().find('strong').text $createTo.val()
     else
@@ -243,6 +241,24 @@ listenForFromToChange = (controller)->
 listenForActionButtons = (controller)->
   $('body').on 'click', '[data-action="edit"]', ->
     $(this).toggleClass("active").siblings('.action-box').toggleClass('active')
+
+  $('body').on 'click', '[data-action="save"]', =>
+    # Save on server
+    $.ajax
+      type: 'POST'
+      url: URI_ROOT + 'mesaj'
+      data:
+        message: controller.lastText
+        from: $('#create-from').val()
+        to: $('#create-to').val()
+        font: controller.fontGroup
+      dataType: 'json'
+      success: (data)->
+        console.log data
+      # error: 1
+
+    # Update uri
+    # Scroll footer
 
 $ ->
   controller.start()

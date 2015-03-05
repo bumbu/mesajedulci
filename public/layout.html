@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mesaje Dulci</title>
 
-    <script src="<?php echo $uriRoot; ?>public/js/vendor/jquery.js"></script>
-    <script src="<?php echo $uriRoot; ?>public/js/main.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/main.js"></script>
     <script>
-    var URI_ROOT = '<?php echo $uriRoot; ?>';
+    var URI_ROOT = '<?php echo $URI_ROOT; ?>';
     var FONTS_DATA = '<?php echo $this->render(Base::instance()->get('fontsFile')); ?>';
-    var PRELOADED_MESSAGE = 'Alege-ți zahărul brun preferat\nși scrie un mesaj dulce\ncelor dragi!';
+    var PRELOADED_MESSAGE = '<?php echo $preloadedMessage; ?>';
     var PRELOADED_FONT = <?php echo $preloadedFont; ?>;
     </script>
-    <link href="<?php echo $uriRoot; ?>public/css/style.css" media="all" rel="stylesheet" />
+    <link href="<?php echo $URI_ROOT; ?>public/css/style.css" media="all" rel="stylesheet" />
   </head>
   <body>
     <div class="header">
@@ -30,7 +30,7 @@
         }(document, 'script', 'facebook-jssdk'));</script>
         <div class="fb-share-button" data-href="http://mesajedulci.md" data-layout="button_count"></div> -->
       </div>
-      <div class="logo"><a href="#"><img src="<?php echo $uriRoot; ?>public/img/logo.jpg" alt="" width="179" height="91"></a></div>
+      <div class="logo"><a href="<?php echo $URI_ROOT; ?>"><img src="<?php echo $URI_ROOT; ?>public/img/logo.jpg" alt="" width="179" height="91"></a></div>
     </div>
     <div class="message-wrapper">
       <div class="message">

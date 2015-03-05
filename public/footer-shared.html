@@ -1,7 +1,11 @@
 <div class="footer-block">
   <div class="from-to">
-    <span><i>De la:</i><strong>Ionică</strong></span>
-    <span><i>Către:</i><strong>Vasilisa</strong></span>
+    <?php if(isset($preloadedFrom) && $preloadedFrom){?>
+    <span><i>De la:</i><strong><?php echo $preloadedFrom;?></strong></span>
+    <?php } ?>
+    <?php if(isset($preloadedTo) && $preloadedTo){?>
+    <span><i>Către:</i><strong><?php echo $preloadedTo;?></strong></span>
+    <?php } ?>
   </div>
   <div class="try-out">
     <a href="#" class="btn-action">Încearcă și tu!</a>
