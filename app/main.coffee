@@ -114,7 +114,14 @@ controller =
 
     return max
 
-  writeText: (text)->
+  writeText: (text=null)->
+    # Cache last text
+    if text?
+      @lastText = text
+    # If no text, get from cache
+    else if @lastText?
+      text = @lastText
+
     text = cleanUpSpecialChars(text)
     lineHeightRaw = @computeLineHeight(text)
     lineHeight = Math.floor lineHeightRaw
@@ -150,16 +157,33 @@ controller =
     $select.on 'change', (el)=>
       @fontGroup = $(el.currentTarget).val()
 
-  start: ->
-    @minHeight = 34
-    @maxHeight = 100
-    @totalHeight = 255
-    @totalWidth = 486
+  listenResize: ->
+    $(window).on 'resize', =>
+      if @resizeTimeout?
+        clearTimeout @resizeTimeout
 
+      @resizeTimeout = setTimeout =>
+        console.log 'r'
+        @computeMessageBoxSizes()
+        @writeText()
+      , 300
+
+  computeMessageBoxSizes: ->
+    @$text.innerHeight
+    @totalHeight = @$text.parent().height() - 1
+    @totalWidth = @$text.width() - 1 # Browser may ceil a float value
+
+  start: ->
     @$text = $('#message')
+
     @fontGroup = 'font1'
+    @minHeight = 34
+    @maxHeight = 120
+    @computeMessageBoxSizes()
+
     @listenTextarea()
     @listenSelect()
+    @listenResize()
 
     #TODO remove me
     # @writeText 'Supărările iubirii\nSunt ca ploile cu soare:\nRepezi, cu cât mai repezi\nCu atât mai trecătore.'
