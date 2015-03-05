@@ -188,6 +188,8 @@ controller =
     @listenResize()
 
 listenForFontChange = (controller)->
+  $wrappers = $('.content-wrapper')
+
   $('body').on 'click', '[data-action="prev-font"]', =>
     currentFont = +controller.fontGroup[controller.fontGroup.length - 1]
     if currentFont is 1
@@ -197,7 +199,9 @@ listenForFontChange = (controller)->
 
     newFont = "font#{newFontIndex}"
 
-    $('.action-content-inner').animate(left: "-#{(newFontIndex - 1) * 100}%")
+    $wrappers.filter("[data-type='#{newFont}']").addClass('active')
+    $('.action-content-inner').animate {left: "-#{(newFontIndex - 1) * 100}%"}, ->
+      $wrappers.not("[data-type='#{newFont}']").removeClass('active')
     controller.fontGroup = newFont
     controller.writeText()
 
@@ -210,10 +214,33 @@ listenForFontChange = (controller)->
 
     newFont = "font#{newFontIndex}"
 
-    $('.action-content-inner').animate(left: "-#{(newFontIndex - 1) * 100}%")
+    $wrappers.filter("[data-type='#{newFont}']").addClass('active')
+    $('.action-content-inner').animate {left: "-#{(newFontIndex - 1) * 100}%"}, ->
+      $wrappers.not("[data-type='#{newFont}']").removeClass('active')
     controller.fontGroup = newFont
     controller.writeText()
+
+listenForFromToChange = (controller)->
+  $createFrom = $('#create-from') # inpute
+  $editFrom = $('#edit-from')
+  $createTo = $('#create-to') # inpute
+  $editTo = $('#edit-to')
+
+  $createFrom.on 'input paste keyup cut change', ->
+    console.log $createFrom.val()
+    if $createFrom.val()
+      $editFrom.show().find('strong').text $createFrom.val()
+    else
+      $editFrom.hide().find('strong').text ''
+
+  $createTo.on 'input paste keyup cut change', ->
+    console.log $createTo.val()
+    if $createTo.val()
+      $editTo.show().find('strong').text $createTo.val()
+    else
+      $editTo.hide().find('strong').text ''
 
 $ ->
   controller.start()
   listenForFontChange controller
+  listenForFromToChange controller
