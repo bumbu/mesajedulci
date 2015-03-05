@@ -131,6 +131,12 @@ a
     display inline-block
     position relative
 
+    &:hover .action-box,
+    .action-box.active
+        display block
+        bottom 78px
+        opacity 1
+
   // >>
   .action
     display inline-block
@@ -237,7 +243,7 @@ a
 
 .action-box
   position absolute
-  bottom 78px
+  bottom 68px
   left 50%
   right 0
   border 1px solid $c-text
@@ -245,6 +251,9 @@ a
   margin-left -86px
   border-radius 4px
   background rgba(#EEEBDE, 0.8)
+  transition .2s ease-in-out all
+  opacity 0
+  z-index 3
 
   .arrow
     position absolute

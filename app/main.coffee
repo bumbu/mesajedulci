@@ -240,7 +240,12 @@ listenForFromToChange = (controller)->
     else
       $editTo.hide().find('strong').text ''
 
+listenForActionButtons = (controller)->
+  $('body').on 'click', '[data-action="edit"]', ->
+    $(this).toggleClass("active").siblings('.action-box').toggleClass('active')
+
 $ ->
   controller.start()
   listenForFontChange controller
   listenForFromToChange controller
+  listenForActionButtons controller
