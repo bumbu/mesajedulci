@@ -350,4 +350,4 @@ $ ->
     for i in [1..5]
       fontSprites.push "#{URI_ROOT}public/fonts/font#{i}/font-sprite.jpg"
     $.preload fontSprites, ->
-      console.log 'all fonts preloaded'
+      # console.log 'all fonts preloaded'
