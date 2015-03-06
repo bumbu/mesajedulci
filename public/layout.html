@@ -14,8 +14,15 @@
     var PRELOADED_MESSAGE = '<?php echo $preloadedMessage; ?>';
     var PRELOADED_MESSAGE_BACKUP = 'Alege-ți zahărul brun preferat\nși scrie un mesaj dulce\ncelor dragi!';
     var PRELOADED_FONT = <?php echo $preloadedFont; ?>;
+    var MESSAGE_ID = '<?php echo isset($messageId) ? $messageId : ''; ?>';
     </script>
     <link href="<?php echo $URI_ROOT; ?>public/css/style.css" media="all" rel="stylesheet" />
+
+    <meta property="og:title" content="Mesaje Dulci" />
+    <meta property="og:description" content="Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!" />
+    <meta property="og:site_name" content="mesajedulci.md" />
+    <meta property="og:image" content="<?php echo $URI_ROOT; ?>public/img/logo.jpg" />
+    <meta property="fb:app_id" content="344439159096152" />
   </head>
   <body>
     <div class="header">

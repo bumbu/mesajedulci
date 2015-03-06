@@ -32,6 +32,8 @@ $f3->route('GET /mesaj/@message',
 		$message = new DB\Jig\Mapper($db, 'message');
 		$message->load(array('@_id=?', $f3->get('PARAMS.message')));
 
+		$f3->set('messageId', $f3->get('PARAMS.message'));
+
 		if($message->dry()){
 			// Nothing found, redirect to main page
 			$f3->set('preloadedFooter', 1);
@@ -70,6 +72,65 @@ $f3->route('POST /mesaj',
 		$message->save();
 
 		echo json_encode(array('url' => $f3->get('URI_ROOT').'mesaj/'.$message->_id));
+	}
+);
+
+$f3->route('POST /trimite',
+	function($f3, $params) {
+		// Trimite email
+		sleep(1);
+
+		// TODO validate email
+		$email = $_POST['email'];
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			echo json_encode(array('success'=>false));
+			return;
+		}
+
+		$messageId = $_POST['messageId'];
+		$db = new DB\Jig('db/data/', DB\Jig::FORMAT_JSON);
+		$message = new DB\Jig\Mapper($db, 'message');
+		$message->load(array('@_id=?', $messageId));
+
+		if($message->dry()){
+			// Nothing found, redirect to main page
+			echo json_encode(array('success'=>false));
+		} else {
+			if($message->from)
+				$subject = "Subject: Mesaj Dulce de la " . $message->from;
+			else
+				$subject = "Subject: Mesaj Dulce";
+
+			$url = $f3->get('URI_ROOT').'mesaj/'.$messageId;
+
+			$emailText = '
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <title>'.$subject.'</title>
+</head>
+<body>
+  <p>Ai primit un mesaj dulce'.($message->from ? ' de la '.$message->from : '').'.</p>
+  <p>Mesajul te așteaptă <a href="'.$url.'">pe adresa '.$url.'</a></p>
+</body>
+</html>
+			';
+
+			$headers   = array();
+			$headers[] = "MIME-Version: 1.0";
+			$headers[] = "Content-type: text/html; charset=utf-8";
+			if ($message->from)
+				$headers[] = "From: Mesaje Dulci (".$message->from.") <no-reply@mesajedulci.md>";
+			else
+				$headers[] = "From: Mesaje Dulci <no-reply@mesajedulci.md>";
+			$headers[] = "Reply-To: Mesaje Dulci <no-reply@mesajedulci.md>";
+			$headers[] = "Subject: ".$subject;
+			$headers[] = "X-Mailer: PHP/".phpversion();
+
+			mail($email, $subject, $emailText, implode("\r\n", $headers));
+
+			echo json_encode(array('success'=>true));
+		}
 	}
 );
 
