@@ -325,14 +325,29 @@ listenForActionButtons = (controller)->
   $actionShare = $('[data-action="share"]')
   $actionShare.on 'click', (ev)->
     ev.preventDefault()
-    FB?.ui?
+    FB?.ui
       method: 'share'
       href: URI_ROOT + 'mesaj/' + MESSAGE_ID
     , (response)->
       console?.log? response
 
 $ ->
-  controller.start()
-  listenForFontChange controller
-  listenForFromToChange controller
-  listenForActionButtons controller
+  $preload = $('.preload')
+  $preloadProgress = $('.preload-progress-done')
+
+  $preloadProgress.animate {width: '95%'}, 10000
+  # Preload first image
+  $.preload "#{URI_ROOT}public/fonts/font#{PRELOADED_FONT}/font-sprite.jpg", ->
+    $preloadProgress.stop().animate {width: '100%'}, 500, ->
+      $preload.hide()
+      controller.start()
+      listenForFontChange controller
+      listenForFromToChange controller
+      listenForActionButtons controller
+
+    # Preload other fonts
+    fontSprites = []
+    for i in [1..5]
+      fontSprites.push "#{URI_ROOT}public/fonts/font#{i}/font-sprite.jpg"
+    $.preload fontSprites, ->
+      console.log 'all fonts preloaded'

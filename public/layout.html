@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mesaje Dulci</title>
 
-    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.min.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.preload.min.js"></script>
     <script src="<?php echo $URI_ROOT; ?>public/js/main.js"></script>
     <script>
     var URI_ROOT = '<?php echo $URI_ROOT; ?>';
@@ -21,6 +22,7 @@
     <meta property="og:title" content="Mesaje Dulci" />
     <meta property="og:description" content="Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!" />
     <meta property="og:site_name" content="mesajedulci.md" />
+    <meta property="og:image" content="<?php echo $URI_ROOT; ?>public/img/fb-cover.jpg" />
     <meta property="og:image" content="<?php echo $URI_ROOT; ?>public/img/fb-cover.jpg" />
     <meta property="fb:app_id" content="344439159096152" />
   </head>
@@ -52,6 +54,11 @@
         <?php echo $this->render(Base::instance()->get('footerEditor')); ?>
         <?php echo $this->render(Base::instance()->get('footerShare')); ?>
 
+      </div>
+    </div>
+    <div class="preload">
+      <div class="preload-progress">
+        <div class="preload-progress-done" style="width: 0%"></div>
       </div>
     </div>
   </body>
