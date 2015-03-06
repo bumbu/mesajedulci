@@ -119,6 +119,7 @@ controller =
   writeText: (text=null)->
     # Cache last text
     if text?
+      text = text.substr(0, 200)
       @lastText = text
     # If no text, get from cache
     else if @lastText?

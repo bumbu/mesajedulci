@@ -37,8 +37,13 @@ $f3->route('GET /mesaj/@message',
 			$f3->set('preloadedFooter', 1);
 		} else {
 			// If my message show share
+			if ($f3->get('SESSION.author') === $message->author) {
+				$f3->set('preloadedFooter', 2);
 			// If shared with me, show try by yourself
-			$f3->set('preloadedFooter', 0);
+			} else {
+				$f3->set('preloadedFooter', 0);
+			}
+
 			$f3->set('preloadedFont', $message->font[strlen($message->font) - 1]);
 			$f3->set('preloadedFrom', $message->from);
 			$f3->set('preloadedTo', $message->to);
@@ -53,10 +58,15 @@ $f3->route('POST /mesaj',
 		$db = new DB\Jig('db/data/', DB\Jig::FORMAT_JSON);
 		$message = new DB\Jig\Mapper($db, 'message');
 
-		$message->message = $_POST['message'];
-		$message->from = $_POST['from'];
-		$message->to = $_POST['to'];
+		if (!$f3->get('SESSION.author')) {
+			$f3->set('SESSION.author', uniqid());
+		}
+
+		$message->message = mb_substr($_POST['message'], 0, 200);
+		$message->from = mb_substr($_POST['from'], 0, 30);
+		$message->to = mb_substr($_POST['to'], 0, 30);
 		$message->font = $_POST['font'];
+		$message->author = $f3->get('SESSION.author');
 		$message->save();
 
 		echo json_encode(array('url' => $f3->get('URI_ROOT').'mesaj/'.$message->_id));
