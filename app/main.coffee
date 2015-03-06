@@ -264,7 +264,9 @@ listenForActionButtons = (controller)->
     ev.preventDefault()
     $('.footer-inner').animate {left: '-100%'}, ->
       history?.pushState?({}, document.title, URI_ROOT)
-      controller.writeText PRELOADED_MESSAGE_BACKUP
+      $('#create-from').val('').trigger('change')
+      $('#create-to').val('').trigger('change')
+      $('#textarea').val(PRELOADED_MESSAGE_BACKUP).trigger('change')
 
 $ ->
   controller.start()
