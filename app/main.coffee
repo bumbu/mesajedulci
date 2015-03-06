@@ -285,27 +285,28 @@ listenForActionButtons = (controller)->
     ev.preventDefault()
 
     # Validate input
-    if $emailForm.find('input').val().match(emailRegex)?
+    if $emailForm.find('[name="email-from"]').val().match(emailRegex)? and $emailForm.find('[name="email-to"]').val().match(emailRegex)?
       # Send to server
       $.ajax
         type: 'POST'
         url: URI_ROOT + 'trimite'
         dataType: 'json'
         data:
-          email: $emailForm.find('input').val()
+          email: $emailForm.find('[name="email-from"]').val()
+          emailFrom: $emailForm.find('[name="email-to"]').val()
           messageId: MESSAGE_ID
         beforeSend: ->
           $alert.show().text('Se trimite...')
-          $emailForm.find('input').hide()
+          $emailForm.find('input, button').hide()
         success: (data)->
           if data?.success? and data.success
             $alert.show().text('Mesaj trimis cu succes!')
           else
             $alert.show().text('S-a întîmplat o eroare. Încercați mai tîrziu.')
-            $emailForm.find('input').show()
+            $emailForm.find('input, button').show()
         error: ->
           $alert.show().text('S-a întîmplat o eroare. Încercați mai tîrziu.')
-          $emailForm.find('input').show()
+          $emailForm.find('input, button').show()
 
     else
       # Show error that email is invalid

@@ -84,7 +84,8 @@ $f3->route('POST /trimite',
 
 		// TODO validate email
 		$email = $_POST['email'];
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		$emailFrom = $_POST['emailFrom'];
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !filter_var($emailFrom, FILTER_VALIDATE_EMAIL)) {
 			echo json_encode(array('success'=>false));
 			return;
 		}
@@ -98,10 +99,7 @@ $f3->route('POST /trimite',
 			// Nothing found, redirect to main page
 			echo json_encode(array('success'=>false));
 		} else {
-			if($message->from)
-				$subject = "Subject: Mesaj Dulce de la " . $message->from;
-			else
-				$subject = "Subject: Mesaj Dulce";
+			$subject = "Ai primit un mesaj dulce!";
 
 			$url = $f3->get('URI_ROOT').'mesaj/'.$messageId;
 
@@ -112,8 +110,9 @@ $f3->route('POST /trimite',
    <title>'.$subject.'</title>
 </head>
 <body>
-  <p>Ai primit un mesaj dulce'.($message->from ? ' de la '.$message->from : '').'.</p>
-  <p>Mesajul te așteaptă <a href="'.$url.'">pe adresa '.$url.'</a></p>
+  <p>Ai primit un mesaj dulce de la '.$emailFrom.'</p>
+	<p>Apasă pe linkul de mai jos pentru a vedea mesajul.</p>
+  <p><a href="'.$url.'">'.$url.'</a></p>
 </body>
 </html>
 			';
@@ -125,7 +124,7 @@ $f3->route('POST /trimite',
 				$headers[] = "From: Mesaje Dulci (".$message->from.") <no-reply@mesajedulci.md>";
 			else
 				$headers[] = "From: Mesaje Dulci <no-reply@mesajedulci.md>";
-			$headers[] = "Reply-To: Mesaje Dulci <no-reply@mesajedulci.md>";
+			$headers[] = "Reply-To: ".($message->from ? $message->from : 'Mesaje Dulci')." <".$emailFrom.">";
 			$headers[] = "Subject: ".$subject;
 			$headers[] = "X-Mailer: PHP/".phpversion();
 
