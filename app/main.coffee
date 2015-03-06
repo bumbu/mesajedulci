@@ -255,11 +255,10 @@ listenForActionButtons = (controller)->
         font: controller.fontGroup
       dataType: 'json'
       success: (data)->
-        console.log data
-      # error: 1
-
-    # Update uri
-    # Scroll footer
+        # Scroll footer
+        $('.footer-inner').animate {left: '-200%'}, ->
+          # Update uri
+          history?.pushState?({}, document.title, data.url)
 
 $ ->
   controller.start()
