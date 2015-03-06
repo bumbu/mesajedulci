@@ -1,10 +1,14 @@
 <div class="footer-block">
   <div class="from-to">
     <?php if(isset($preloadedFrom) && $preloadedFrom){?>
-    <span><i>De la:</i><strong><?php echo $preloadedFrom;?></strong></span>
+    <span class="edit-from"><i>De la:</i><strong><?php echo $preloadedFrom;?></strong></span>
+    <?php }else{ ?>
+    <span class="edit-from" style="display: none;"><i>De la:</i><strong></strong></span>
     <?php } ?>
     <?php if(isset($preloadedTo) && $preloadedTo){?>
-    <span><i>Către:</i><strong><?php echo $preloadedTo;?></strong></span>
+    <span class="edit-to"><i>Către:</i><strong><?php echo $preloadedTo;?></strong></span>
+    <?php }else{ ?>
+    <span class="edit-to" style="display: none;"><i>Către:</i><strong></strong></span>
     <?php } ?>
   </div>
   <div class="try-out">

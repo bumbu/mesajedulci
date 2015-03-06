@@ -223,9 +223,9 @@ listenForFontChange = (controller)->
 
 listenForFromToChange = (controller)->
   $createFrom = $('#create-from') # input
-  $editFrom = $('#edit-from')
+  $editFrom = $('.edit-from')
   $createTo = $('#create-to') # input
-  $editTo = $('#edit-to')
+  $editTo = $('.edit-to')
 
   $createFrom.on 'input paste keyup cut change', ->
     if $createFrom.val()
