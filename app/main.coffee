@@ -183,7 +183,7 @@ controller =
     @maxHeight = 120
     @computeMessageBoxSizes()
 
-    @writeText PRELOADED_MESSAGE
+    @writeText PRELOADED_MESSAGE || PRELOADED_MESSAGE_BACKUP
     @listenTextarea()
     @listenSelect()
     @listenResize()
@@ -259,6 +259,12 @@ listenForActionButtons = (controller)->
         $('.footer-inner').animate {left: '-200%'}, ->
           # Update uri
           history?.pushState?({}, document.title, data.url)
+
+  $('body').on 'click', '[data-action="try"]', (ev)=>
+    ev.preventDefault()
+    $('.footer-inner').animate {left: '-100%'}, ->
+      history?.pushState?({}, document.title, URI_ROOT)
+      controller.writeText PRELOADED_MESSAGE_BACKUP
 
 $ ->
   controller.start()

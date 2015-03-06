@@ -17,11 +17,11 @@ $f3->set('preloadedFont', 1);
 $f3->set('footerShared','footer-shared.html');
 $f3->set('footerEditor','footer-editor.html');
 $f3->set('footerShare','footer-share.html');
+$f3->set('preloadedMessage', '');
 
 $f3->route('GET /',
 	function($f3) {
 		$f3->set('preloadedFooter', 1);
-		$f3->set('preloadedMessage', 'Alege-ți zahărul brun preferat\nși scrie un mesaj dulce\ncelor dragi!');
 		echo View::instance()->render('layout.html');
 	}
 );
