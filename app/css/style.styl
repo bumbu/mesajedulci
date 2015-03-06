@@ -136,11 +136,11 @@ a
     display inline-block
     position relative
 
-    &:hover .action-box,
+    &:hover:not(.no-hover) .action-box,
     .action-box.active
-        display block
-        bottom 78px
-        opacity 1
+      display block
+      bottom 78px
+      opacity 1
 
   // >>
   .action
