@@ -19,6 +19,8 @@ $f3->set('footerEditor','footer-editor.html');
 $f3->set('footerShare','footer-share.html');
 $f3->set('preloadedMessage', '');
 
+header('Access-Control-Allow-Origin: static.ak.facebook.com');
+
 $f3->route('GET /',
 	function($f3) {
 		$f3->set('preloadedFooter', 1);
