@@ -327,11 +327,16 @@ listenForActionButtons = (controller)->
   $actionShare = $('[data-action="share"]')
   $actionShare.on 'click', (ev)->
     ev.preventDefault()
-    FB?.ui
-      method: 'share'
-      href: URI_ROOT + 'mesaj/' + MESSAGE_ID
-    , (response)->
-      console?.log? response
+
+    winWidth = 520
+    winHeight = 510
+    winTop = ($(window).height() / 2) - (winHeight / 2)
+    winLeft = ($(window).width() / 2) - (winWidth / 2)
+
+    title = ''
+    descr = ''
+    url = URI_ROOT + 'mesaj/' + MESSAGE_ID
+    window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
 
 $ ->
   $preload = $('.preload')

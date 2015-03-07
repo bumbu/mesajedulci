@@ -121,9 +121,9 @@ $f3->route('POST /trimite',
 			$headers[] = "MIME-Version: 1.0";
 			$headers[] = "Content-type: text/html; charset=utf-8";
 			if ($message->from)
-				$headers[] = "From: Mesaje Dulci (".$message->from.") <no-reply@mesajedulci.md>";
+				$headers[] = "From: Mesaje Dulci (".$message->from.") <no-reply@mesajedulci.com>";
 			else
-				$headers[] = "From: Mesaje Dulci <no-reply@mesajedulci.md>";
+				$headers[] = "From: Mesaje Dulci <no-reply@mesajedulci.com>";
 			$headers[] = "Reply-To: ".($message->from ? $message->from : 'Mesaje Dulci')." <".$emailFrom.">";
 			$headers[] = "Subject: ".$subject;
 			$headers[] = "X-Mailer: PHP/".phpversion();
