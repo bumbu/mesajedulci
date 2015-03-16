@@ -82,6 +82,11 @@ $f3->route('POST /trimite',
 		// Trimite email
 		sleep(1);
 
+		if (!isset($_POST['email']) || !isset($_POST['emailFrom']) || !isset($_POST['messageId'])) {
+			echo json_encode(array('success'=>false, 'message'=> 'Not all POST parameters set'));
+			return false;
+		}
+
 		// TODO validate email
 		$email = $_POST['email'];
 		$emailFrom = $_POST['emailFrom'];
@@ -121,9 +126,9 @@ $f3->route('POST /trimite',
 			$headers[] = "MIME-Version: 1.0";
 			$headers[] = "Content-type: text/html; charset=utf-8";
 			if ($message->from)
-				$headers[] = "From: Mesaje Dulci (".$message->from.") <no-reply@mesajedulci.com>";
+				$headers[] = "From: Mesaje Dulci (".$message->from.") <no-reply@".$f3->get('URI_DOMAIN').">";
 			else
-				$headers[] = "From: Mesaje Dulci <no-reply@mesajedulci.com>";
+				$headers[] = "From: Mesaje Dulci <no-reply@".$f3->get('URI_DOMAIN').">";
 			$headers[] = "Reply-To: ".($message->from ? $message->from : 'Mesaje Dulci')." <".$emailFrom.">";
 			$headers[] = "Subject: ".$subject;
 			$headers[] = "X-Mailer: PHP/".phpversion();

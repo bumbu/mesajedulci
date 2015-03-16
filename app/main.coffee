@@ -242,6 +242,8 @@ listenForFromToChange = (controller)->
 listenForActionButtons = (controller)->
   emailRegex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i
   $actionCopy = $('[data-action="copy"]')
+  $emailForm = $('#email-form')
+  $alert = $emailForm.siblings('.alert')
 
   $('body').on 'click', '[data-action="edit"]', ->
     $(this).toggleClass("active").siblings('.action-box').toggleClass('active')
@@ -263,7 +265,7 @@ listenForActionButtons = (controller)->
           # Update uri
           history?.pushState?({}, document.title, data.url)
           # Update message id
-          MESSAGE_ID = data.url.substr(data.url.lastIndexOf('/') + 1)
+          window.MESSAGE_ID = data.url.substr(data.url.lastIndexOf('/') + 1)
           # Update share link
           $actionCopy
             .attr('data-clipboard-text', URI_ROOT + 'mesaj/' + MESSAGE_ID)
@@ -276,11 +278,12 @@ listenForActionButtons = (controller)->
       $('#create-to').val('').trigger('change')
       $('#textarea').val(PRELOADED_MESSAGE_BACKUP).trigger('change')
 
+    $alert.hide()
+    $emailForm.find('input, button').show()
+
   $('body').on 'click', '[data-action="email"]', ->
     $(this).toggleClass("active").siblings('.action-box').toggleClass('active')
 
-  $emailForm = $('#email-form')
-  $alert = $emailForm.siblings('.alert')
   $emailForm.on 'submit', (ev)->
     ev.preventDefault()
 
@@ -333,10 +336,14 @@ listenForActionButtons = (controller)->
     winTop = ($(window).height() / 2) - (winHeight / 2)
     winLeft = ($(window).width() / 2) - (winWidth / 2)
 
+    # title = 'Mesaje Dulci'
     title = ''
+    # descr = 'Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!'
     descr = ''
     url = URI_ROOT + 'mesaj/' + MESSAGE_ID
-    window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
+    # image = URI_ROOT + 'public/img/fb-cover.jpg'
+    image = ''
+    window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url + '&p[images][0]=' + image, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
 
 $ ->
   $preload = $('.preload')
