@@ -1,3 +1,5 @@
+version = '?v=2'
+
 cleanUpSpecialChars = (str)->
   str = str.replace(/[àáâãäåă]/gi,"a") # ă, â
   str = str.replace(/[șşṣṩṧš]/gi,"s") # ș
@@ -45,7 +47,7 @@ controller =
     else
       symbol.toUpperCase()
 
-  symbolMaps = {}
+  symbolMaps: {}
 
   getSymbolMap: ->
     # Create if not created previously
@@ -187,7 +189,7 @@ controller =
       else if symbolData.symbol is '\n'
         newText += "</span><br><span style='padding: 0 #{spaceHalfWidth}px;'>"
       else
-        newText += "<i style='width: #{Math.floor symbolData.width}px; height: #{lineHeight}px;'><img style='width:#{maxCharacterWidth}px;margin-top: -#{symbolOffset}px' src='#{URI_ROOT}public/fonts/#{@fontGroup}/font-sprite.jpg'></i>"
+        newText += "<i style='width: #{Math.floor symbolData.width}px; height: #{lineHeight}px;'><img style='width:#{maxCharacterWidth}px;margin-top: -#{symbolOffset}px' src='#{URI_ROOT}public/fonts/#{@fontGroup}/font-sprite.jpg#{version}'></i>"
     newText += '</span>' # Last tag
 
     @$text.html newText
@@ -357,7 +359,7 @@ $ ->
 
   $preloadProgress.animate {width: '95%'}, 10000
   # Preload first image
-  $.preload "#{URI_ROOT}public/fonts/font#{PRELOADED_FONT}/font-sprite.jpg", ->
+  $.preload "#{URI_ROOT}public/fonts/font#{PRELOADED_FONT}/font-sprite.jpg#{version}", ->
     $preloadProgress.stop().animate {width: '100%'}, 500, ->
       $preload.hide()
       controller.start()
@@ -368,6 +370,6 @@ $ ->
     # Preload other fonts
     fontSprites = []
     for i in [1..5]
-      fontSprites.push "#{URI_ROOT}public/fonts/font#{i}/font-sprite.jpg"
+      fontSprites.push "#{URI_ROOT}public/fonts/font#{i}/font-sprite.jpg#{version}"
     $.preload fontSprites, ->
       # console.log 'all fonts preloaded'
