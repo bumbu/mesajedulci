@@ -45,14 +45,20 @@ controller =
     else
       symbol.toUpperCase()
 
-  # TODO cache
-  getSymbolMap: ->
-    symbolMap = {}
-    for symbol of @getFontsData()[@fontGroup]
-      # symbol = symbol
-      symbolMap[@decodeSymbol(symbol)] = symbol
+  symbolMaps = {}
 
-    return symbolMap
+  getSymbolMap: ->
+    # Create if not created previously
+    unless @fontGroup of @symbolMaps
+      symbolMap = {}
+      for symbol of @getFontsData()[@fontGroup]
+        # symbol = symbol
+        symbolMap[@decodeSymbol(symbol)] = symbol
+
+      # Cache
+      @symbolMaps[@fontGroup] = symbolMap
+
+    return @symbolMaps[@fontGroup]
 
   isSymbol: (symbol)->
     symbol.toUpperCase() of @getSymbolMap()
