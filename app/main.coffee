@@ -6,6 +6,13 @@ cleanUpSpecialChars = (str)->
 
   return str
 
+unescape = (str)->
+  str = str.replace(/\&amp;/g, '&')
+  str = str.replace(/\&lt;/g,  '<')
+  str = str.replace(/\&gt;/g,  '>')
+  str = str.replace(/\&apos;/g,  "'")
+  str = str.replace(/\&quot;/g,  '"')
+
 controller =
   getSymbolMap: ->
     unless @_symbolMap
@@ -126,6 +133,7 @@ controller =
       text = @lastText
 
     text = cleanUpSpecialChars(text)
+    text = unescape(text)
     lineHeightRaw = @computeLineHeight(text)
     lineHeight = Math.floor lineHeightRaw
     spriteWidth = @spriteWidth()

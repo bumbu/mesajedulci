@@ -51,7 +51,7 @@ $f3->route('GET /mesaj/@message',
 			$f3->set('preloadedFont', $message->font[strlen($message->font) - 1]);
 			$f3->set('preloadedFrom', $message->from);
 			$f3->set('preloadedTo', $message->to);
-			$f3->set('preloadedMessage', substr(json_encode($message->message), 1, -1));
+			$f3->set('preloadedMessage', $message->message);
 		}
 		echo View::instance()->render('layout.html');
 	}
