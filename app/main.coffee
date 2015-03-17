@@ -13,32 +13,63 @@ unescape = (str)->
   str = str.replace(/\&apos;/g,  "'")
   str = str.replace(/\&quot;/g,  '"')
 
+symbolEncodingMap =
+  '-': 'symbol-minus'
+  ',': 'symbol-comma'
+  '.': 'symbol-dot'
+  '+': 'symbol-plus'
+  '(': 'symbol-left-parantheses'
+  ')': 'symbol-right-parantheses'
+  '?': 'symbol-question'
+  '!': 'symbol-exclamation'
+  ':': 'symbol-column'
+  '*': 'symbol-star'
+  '=': 'symbol-equal'
+  '>': 'symbol-bigger'
+  '<': 'symbol-smaller'
+
+symbolDecodingMap = {}
+for symbol, encoding of symbolEncodingMap
+  symbolDecodingMap[encoding] = symbol
+
 controller =
+  encodeSymbol: (symbol)->
+    if symbol of symbolEncodingMap
+      symbolEncodingMap[symbol]
+    else
+      symbol
+
+  decodeSymbol: (symbol)->
+    if symbol of symbolDecodingMap
+      symbolDecodingMap[symbol]
+    else
+      symbol.toUpperCase()
+
+  # TODO cache
   getSymbolMap: ->
-    unless @_symbolMap
-      @_symbolMap =
-        '-': 'symbol-minus'
-        ',': 'symbol-comma'
-        '.': 'symbol-dot'
-        '+': 'symbol-plus'
-        '(': 'symbol-left-parantheses'
-        ')': 'symbol-right-parantheses'
-        '?': 'symbol-question'
-        '!': 'symbol-exclamation'
-        ':': 'symbol-column'
-        '*': 'symbol-star'
-        '=': 'symbol-equal'
-        '>': 'symbol-bigger'
-        '<': 'symbol-smaller'
+    symbolMap = {}
+    for symbol of @getFontsData()[@fontGroup]
+      # symbol = symbol
+      symbolMap[@decodeSymbol(symbol)] = symbol
 
-      for i in [0..9]
-        @_symbolMap["#{i}"] = "#{i}"
+    return symbolMap
 
-      for i in [65..90]
-        char = String.fromCharCode(i)
-        @_symbolMap[char] = char
+  isSymbol: (symbol)->
+    symbol.toUpperCase() of @getSymbolMap()
 
-    return @_symbolMap
+  each: (str, cb)->
+    i = 0
+    while i < str.length
+      if i < str.length - 1
+        if @isSymbol(str.substr(i, 2))
+          cb(str.substr(i, 2))
+          i++
+        else
+          cb(str[i])
+      else
+        cb(str[i])
+
+      i++
 
   getSymbolFontData: (symbol)->
     symbolMap = @getSymbolMap()
@@ -84,7 +115,7 @@ controller =
 
   computeWidth: (text, height=100)->
     sum = 0
-    for symbol in text.split('')
+    @each text, (symbol)=>
       symbolData = @getSymbolData(symbol, height)
       sum += symbolData.width
 
@@ -141,7 +172,7 @@ controller =
     spaceHalfWidth = Math.floor(@getSymbolData(' ', lineHeight).width / 2)
 
     newText = "<span style='padding: 0 #{spaceHalfWidth}px;'>" # First tag
-    for symbol in text.split('')
+    @each text, (symbol)=>
       symbolData = @getSymbolData(symbol, lineHeight)
       symbolOffset = symbolData.index * 240 * maxCharacterWidth / spriteWidth
 
