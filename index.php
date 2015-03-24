@@ -18,6 +18,7 @@ $f3->set('footerShared','footer-shared.html');
 $f3->set('footerEditor','footer-editor.html');
 $f3->set('footerShare','footer-share.html');
 $f3->set('preloadedMessage', '');
+$f3->set('coverImage', 'public/img/fb-cover.jpg');
 
 header('Access-Control-Allow-Origin: static.ak.facebook.com');
 
@@ -51,7 +52,7 @@ $f3->route('GET /mesaj/@message',
 			$f3->set('preloadedFont', $message->font[strlen($message->font) - 1]);
 			$f3->set('preloadedFrom', $message->from);
 			$f3->set('preloadedTo', $message->to);
-			$f3->set('preloadedMessage', $message->message);
+			$f3->set('preloadedMessage', str_replace("\n", '\n', $message->message));
 		}
 		echo View::instance()->render('layout.html');
 	}
