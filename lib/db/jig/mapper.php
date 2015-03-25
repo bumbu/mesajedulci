@@ -313,10 +313,15 @@ class Mapper extends \DB\Cursor {
 			return $this->update();
 		$db=$this->db;
 		$now=microtime(TRUE);
-		while (($id=uniqid(NULL,TRUE)) &&
-			($data=$db->read($this->file)) && isset($data[$id]) &&
-			!connection_aborted())
-			usleep(mt_rand(0,100));
+		// print_r($this->document['id']);
+		if(isset($this->document['id']) && ($data=$db->read($this->file)) && !isset($data[$this->document['id']]) && !connection_aborted()) {
+			$id = $this->document['id'];
+		} else {
+			while (($id=uniqid(NULL,TRUE)) &&
+				($data=$db->read($this->file)) && isset($data[$id]) &&
+				!connection_aborted())
+				usleep(mt_rand(0,100));
+		}
 		$this->id=$id;
 		$data[$id]=$this->document;
 		$pkey=array('_id'=>$this->id);
@@ -432,8 +437,15 @@ class Mapper extends \DB\Cursor {
 	**/
 	function copyto($key) {
 		$var=&\Base::instance()->ref($key);
-		foreach ($this->document as $key=>$field)
+		print_r($var);
+		echo "\n";
+		foreach ($this->document as $key=>$field) {
 			$var[$key]=$field;
+			echo "\n";
+			print_r($key);
+			print_r($field);
+
+		}
 	}
 
 	/**

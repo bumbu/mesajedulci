@@ -59,6 +59,36 @@ $f3->route('GET /mesaj/@message',
 	}
 );
 
+$keys = array(
+  array('doi', 'trei', 'patru', 'cinci', 'sase', 'sapte', 'opt', 'noua', 'zece', 'multi', 'saiseci.si.noua', 'mii.de.', 'o.oaste.de', 'milioane.de')
+,	array('ursi', 'cerbi', 'cai', 'zmei', 'cucosi', 'iepuri', 'sarpi', 'lupi', 'motani', 'ciini', 'elefanti', 'vulturi', 'delfini', 'tigri')
+, array('frumosi', 'viteji', 'uimiti', 'curiosi', 'creativi', 'jucausi', 'bosumflati', 'flaminzi', 'satui', 'somnorosi', 'agitati', 'gingasi', 'palizi', 'visatori')
+, array('maninca', 'fac', 'cauta', 'privesc', 'strica', 'taie', 'picteaza', 'fotografiaza', 'uda', 'gatesc', 'miroase', 'asteapta', 'pindesc', 'asculta')
+, array('carne', 'televizorul', 'casa', 'natura', 'patul', 'aerul', 'natura', 'timpul', 'cerul', 'copacii', 'marea', 'oceanul', 'pesti', 'pamint')
+);
+
+function getTextId($id){
+	global $keys;
+	$newIdPieces = [];
+
+	$idBase14 = base_convert($id + 1, 10, 14);
+	if (strlen($idBase14) < 5) {
+		$idBase14 = str_repeat('0', 5 - strlen($idBase14)) . $idBase14;
+	}
+
+	for($i = 0; $i < 5; $i++){
+		$index = intval(base_convert($idBase14[$i], 14, 10));
+		$newIdPieces[] = $keys[$i][$index];
+	}
+
+	// If more than 4 characters then append the rest of them
+	if (strlen($idBase14) > 5) {
+		$newIdPieces[] = substr($idBase14, 5);
+	}
+
+	return implode('.', $newIdPieces);
+}
+
 $f3->route('POST /mesaj',
 	function($f3, $params) {
 		$db = new DB\Jig('db/data/', DB\Jig::FORMAT_JSON);
@@ -73,6 +103,7 @@ $f3->route('POST /mesaj',
 		$message->to = mb_substr($_POST['to'], 0, 30);
 		$message->font = $_POST['font'];
 		$message->author = $f3->get('SESSION.author');
+		$message->id = getTextId($message->count() + 1);
 		$message->save();
 
 		echo json_encode(array('url' => $f3->get('URI_ROOT').'mesaj/'.$message->_id));
