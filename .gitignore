@@ -4,7 +4,11 @@ TODO.md
 public/fonts
 public/js
 public/css
+public/img/fb-cover-bg.*
+public/img/fb-cover.png
 app/fonts
 app/_fonts
 app/tmp
 db/
+fonts-server.json
+test.php
