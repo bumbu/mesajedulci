@@ -321,7 +321,7 @@ listenForActionButtons = (controller)->
       history?.pushState?({}, document.title, URI_ROOT)
       $('#create-from').val('').trigger('change')
       $('#create-to').val('').trigger('change')
-      $('#textarea').val(PRELOADED_MESSAGE_BACKUP).trigger('change')
+      $('#textarea').val($('#textarea').val() || PRELOADED_MESSAGE || '').trigger('change')
 
   copyInstance = new ZeroClipboard(document.getElementById("copy-button"))
 
