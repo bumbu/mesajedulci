@@ -298,8 +298,19 @@ $f3->route('GET /stats',
 	function($f3, $params) {
 		$db = new DB\Jig('db/data/', DB\Jig::FORMAT_JSON);
 		$message = new DB\Jig\Mapper($db, 'message');
+		$defaultMessage = "Alege-ți zahărul\nbrun preferat și\nscrie un mesaj\ndulce celor dragi!";
 
-		echo 'Număr total de mesaje: '. $message->count();
+		echo 'Număr total de mesaje: '. count($message->find(array('@message!=?', $defaultMessage)));
+
+		$nonDefaultMessages = $message->find(array('@message!=?',$defaultMessage));
+
+		// echo '<br>Zahăr Bucăți: '.count($message->find(array('@font=?','font1')));
+		echo '<br>Zahăr Bucăți: '.count(array_filter($nonDefaultMessages, function($a){return $a['font'] == 'font1';}));
+		echo '<br>Zahăr Golden Granulated: '.count(array_filter($nonDefaultMessages, function($a){return $a['font'] == 'font2';}));
+		echo '<br>Zahăr Demerara: '.count(array_filter($nonDefaultMessages, function($a){return $a['font'] == 'font3';}));
+		echo '<br>Zahăr Pachețele: '.count(array_filter($nonDefaultMessages, function($a){return $a['font'] == 'font4';}));
+		echo '<br>Zahăr brun din trestie de zahăr: '.count(array_filter($nonDefaultMessages, function($a){return $a['font'] == 'font5';}));
+
 	}
 );
 
