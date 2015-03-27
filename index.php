@@ -294,4 +294,13 @@ $f3->route('GET /imagine/@message',
 	}
 );
 
+$f3->route('GET /stats',
+	function($f3, $params) {
+		$db = new DB\Jig('db/data/', DB\Jig::FORMAT_JSON);
+		$message = new DB\Jig\Mapper($db, 'message');
+
+		echo 'Număr total de mesaje: '. $message->count();
+	}
+);
+
 $f3->run();
