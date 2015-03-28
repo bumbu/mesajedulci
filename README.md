@@ -1,5 +1,7 @@
 # Mesaje Dulci
 
+![Page Demo](http://bumbu.github.io/mesajedulci/demo.jpg)
+
 A single web page featuring:
 - 5 Custom image fonts
 - Live typing with image fonts
