@@ -194,18 +194,7 @@ gulp.task 'images-sprite', ->
       console.log folderPath + ' done'
 
     promisses.push deferred.promise
-    # console.log "convert #{folderPath}*.jpg -background #eeebdf -append #{folderPath}font-sprite.jpg"
-    # easyimage.exec "convert #{folderPath}*.jpg -background #eeebdf -append #{folderPath}font-sprite.jpg"
 
   Q.all(promisses)
   .then ->
     console.log 'Joinging symbols done'
-
-    convArgs = []
-    folders.forEach (folder)->
-      convArgs.push "#{publicFontsFolder}#{folder}/font-sprite.jpg"
-    convArgs = convArgs.concat ['-background', '#efebe2', '-quality', 40, '+append', "#{publicFontsFolder}fonts-sprite.jpg"]
-    console.log convArgs
-
-    exec 'convert', convArgs, (err, stdout, stderr)->
-      console.log 'Joining fonts done'
