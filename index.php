@@ -98,15 +98,35 @@ $f3->route('POST /mesaj',
 			$f3->set('SESSION.author', uniqid());
 		}
 
-		$message->message = mb_substr($_POST['message'], 0, 200);
-		$message->from = mb_substr($_POST['from'], 0, 30);
-		$message->to = mb_substr($_POST['to'], 0, 30);
-		$message->font = $_POST['font'];
-		$message->author = $f3->get('SESSION.author');
-		$message->id = getTextId($message->count() + 1);
-		$message->save();
+		$from = $_POST['from'];
+		$to = $_POST['to'];
+		$font = $_POST['font'];
+		// $from = $_POST['from'];
 
-		echo json_encode(array('url' => $f3->get('URI_ROOT').'mesaj/'.$message->_id));
+		$similarMessages = $message->find(array('@message=?',$_POST['message']));
+		// Cast DB objects into array
+		$similarMessages = array_map(function($m){return $m->cast();}, $similarMessages);
+		// Filter
+		$similarMessages = array_filter($similarMessages, function($m) use ($from){return $m['from'] == $from;});
+		$similarMessages = array_filter($similarMessages, function($m) use ($to){return $m['to'] == $to;});
+		$similarMessages = array_filter($similarMessages, function($m) use ($font){return $m['font'] == $font;});
+		// Reset indexes
+		$similarMessages = array_values($similarMessages);
+
+		if (count($similarMessages) > 0){
+			echo json_encode(array('url' => $f3->get('URI_ROOT').'mesaj/'.$similarMessages[0]['_id']));
+		} else {
+			$message->message = mb_substr($_POST['message'], 0, 200);
+			$message->from = mb_substr($_POST['from'], 0, 30);
+			$message->to = mb_substr($_POST['to'], 0, 30);
+			$message->font = $_POST['font'];
+			$message->author = $f3->get('SESSION.author');
+			$message->id = getTextId($message->count() + 1);
+			$message->save();
+
+			echo json_encode(array('url' => $f3->get('URI_ROOT').'mesaj/'.$message->_id));
+		}
+
 	}
 );
 
