@@ -193,6 +193,7 @@ define('SYMBOL_HEIGHT', 120);
 
 function mbStringToArray ($string) {
   $strlen = mb_strlen($string);
+  $array = [];
   while ($strlen) {
     $array[] = mb_substr($string,0,1,"UTF-8");
     $string = mb_substr($string,1,$strlen,"UTF-8");
@@ -243,6 +244,10 @@ function getImage($fontData, $fontName, $message){
 
 	$heigthOffset = 0;
 	foreach($rows as $row){
+		if (strlen($row) == 0) {
+			$heigthOffset += SYMBOL_HEIGHT;
+			continue;
+		}
 		$width = getStrWidth($fontData, $row);
 
 		$rowImage = new Image('./public/img/fb-cover-bg.png');
