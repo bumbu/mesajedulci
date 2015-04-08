@@ -24,7 +24,13 @@ header('Access-Control-Allow-Origin: static.ak.facebook.com');
 
 $f3->route('GET /',
 	function($f3) {
+		$db = new DB\Jig('db/data/', DB\Jig::FORMAT_JSON);
+		$message = new DB\Jig\Mapper($db, 'message');
+
+
+		$f3->set('messagesCount', $message->count());
 		$f3->set('preloadedFooter', 1);
+
 		echo View::instance()->render('layout.html');
 	}
 );
@@ -33,10 +39,12 @@ $f3->route('GET /mesaj/@message',
 	function($f3) {
 		$db = new DB\Jig('db/data/', DB\Jig::FORMAT_JSON);
 		$message = new DB\Jig\Mapper($db, 'message');
+		$count = $message->count();
 		$message->load(array('@_id=?', $f3->get('PARAMS.message')));
 
 		$f3->set('messageId', $f3->get('PARAMS.message'));
 		$f3->set('coverImage', 'imagine/'.$f3->get('PARAMS.message'));
+		$f3->set('messagesCount', $count);
 
 		if($message->dry()){
 			// Nothing found, redirect to main page
