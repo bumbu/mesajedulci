@@ -10,6 +10,11 @@ A single web page featuring:
 - Rendering messages on server
 - Storing messages on server
 
+## Prerequisites
+
+* Imagemagic
+* Gulp.js
+
 ## Quick Start
 
 You should have a `app/font` folder that will contain at least one subfolder with font letters.
@@ -33,3 +38,12 @@ Running `gulp images-sprite` will join images into sprites (used for web).
 ## License
 
 [GNU Public License](http://www.gnu.org/licenses/gpl-3.0.html) (GPL v3)
+
+## Test string
+abcdefghijklm
+nopqrstuvwxyz
+0123456789
+-=+:,.!?()<>
+ășțâî
+
+abcdefghijklm\nnopqrstuvwxyz\n0123456789\n-=+:,.!?()<>\nășțâî

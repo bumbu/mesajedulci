@@ -124,11 +124,8 @@ gulp.task 'images', ['images-process'], ->
         height: symbolData.height
         index: index
 
-  # fs.writeFile './public/js/fonts.json', JSON.stringify(fontsData), ->
-  #   console.log 'Image data saved into fonts.json'
-
-  fs.writeFile './fonts-server.json', JSON.stringify(fontsData), ->
-    console.log 'Image data saved into fonts-server.json'
+  fs.writeFile './public/js/fonts.json', JSON.stringify(fontsData), ->
+    console.log 'Image data saved into fonts.json'
 
 gulp.task 'images-process', ->
   gulp.src './app/fonts/**/*.jpg'
@@ -138,8 +135,8 @@ gulp.task 'images-process', ->
       easyimage.resize
         src: file.path
         dst: tmpFilePath
-        height: 120
-        width: 1000 # Set width excesively large so that resize is done by height
+        height: 240
+        width: 2000 # Set width excesively large so that resize is done by height
         quality: 100
       .then (image)->
         # Read image data

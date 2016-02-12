@@ -1,10 +1,28 @@
-version = '?v=2'
+version = '?v=3'
+
+###
+  Accents
+  \u0306 - breve
+  \u0302 - circumflex
+  \u0326 - comma below
+  \u030C - caron (used wrongly as breve)
+
+  \u0102 - a breve
+  \u00C2 - a circumflex
+  \u00CE - i circumflex
+  \u0218 - s comma below
+  \u021A - t comma below
+###
 
 cleanUpSpecialChars = (str)->
-  str = str.replace(/[àáâãäåă]/gi,"a") # ă, â
-  str = str.replace(/[șşṣṩṧš]/gi,"s") # ș
-  str = str.replace(/[țƫţṭ]/gi,"t") # ț
-  str = str.replace(/[îíǐĭìï]/gi,"i") # î
+  str = str
+    .replace(/[àáãäåă]/gi,"\u0102") # ă
+    .replace(/a\u0306/gi,"\u0102") # ă
+    .replace(/a\u030C/gi,"\u0102") # ă
+    .replace(/a\u0302/gi,"\u00C2") # â
+    .replace(/[îíǐĭìï]/gi,"\u00CE") # î
+    .replace(/[șşṣṩṧš]/gi,"\u0218") # ș
+    .replace(/[țƫţṭ]/gi,"\u021A") # ț
 
   return str
 
@@ -29,6 +47,11 @@ symbolEncodingMap =
   '=': 'symbol-equal'
   '>': 'symbol-bigger'
   '<': 'symbol-smaller'
+  '\u0102': 'accent-a-breve'
+  '\u00C2': 'accent-a-circumflex'
+  '\u00CE': 'accent-i-circumflex'
+  '\u0218': 'accent-s-comma'
+  '\u021A': 'accent-t-comma'
 
 symbolDecodingMap = {}
 for symbol, encoding of symbolEncodingMap
