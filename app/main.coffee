@@ -1,11 +1,13 @@
-version = '?v=3'
+version = '?v=4'
 
 ###
   Accents
   \u0306 - breve
+  \u030C - caron (used wrongly as breve)
   \u0302 - circumflex
   \u0326 - comma below
-  \u030C - caron (used wrongly as breve)
+  \u0327 - cedilla below
+
 
   \u0102 - a breve
   \u00C2 - a circumflex
@@ -17,12 +19,16 @@ version = '?v=3'
 cleanUpSpecialChars = (str)->
   str = str
     .replace(/[àáãäåă]/gi,"\u0102") # ă
-    .replace(/a\u0306/gi,"\u0102") # ă
-    .replace(/a\u030C/gi,"\u0102") # ă
-    .replace(/a\u0302/gi,"\u00C2") # â
+    .replace(/a\u0306/gi,"\u0102") # ă breve
+    .replace(/a\u030C/gi,"\u0102") # ă caron
+    .replace(/a\u0302/gi,"\u00C2") # â circumflex
     .replace(/[îíǐĭìï]/gi,"\u00CE") # î
     .replace(/[șşṣṩṧš]/gi,"\u0218") # ș
+    .replace(/s\u0326/gi,"\u0218") # ș comma
+    .replace(/s\u0327/gi,"\u0218") # ș cedilla
     .replace(/[țƫţṭ]/gi,"\u021A") # ț
+    .replace(/t\u0326/gi,"\u021A") # ț comma
+    .replace(/t\u0327/gi,"\u021A") # ț cedilla
 
   return str
 
