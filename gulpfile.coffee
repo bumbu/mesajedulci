@@ -82,7 +82,7 @@ gulp.task 'development-vendor', ->
 # Images processing
 # ########################
 imagesJSON = {}
-gulp.task 'images', ['images-process'], ->
+imagesDataProcess = (fontsFolder, jsonFileLocation) -> ()->
   fontsData = {}
 
   # Find font groups
@@ -94,7 +94,7 @@ gulp.task 'images', ['images-process'], ->
       fontsData[fontGroup] = {} # Init fonts data arrays
 
   for fontGroup in fontGroups
-    fontGroupFolder = "./public/fonts/#{fontGroup}"
+    fontGroupFolder = "#{fontsFolder}/#{fontGroup}"
     fontGroupFiles = fs.readdirSync(fontGroupFolder).filter (file)->
       "#{fontGroup}/#{file}" of imagesJSON
 
@@ -124,10 +124,25 @@ gulp.task 'images', ['images-process'], ->
         height: symbolData.height
         index: index
 
-  fs.writeFile './public/js/fonts.json', JSON.stringify(fontsData), ->
-    console.log 'Image data saved into fonts.json'
+  fs.writeFile jsonFileLocation, JSON.stringify(fontsData), ->
+    console.log "Image data saved into #{jsonFileLocation}"
 
-gulp.task 'images-process', ->
+imagesProcess = (fontsFolder, imageHeight)-> ()->
+  # Clean old directory
+  fs.readdirSync(fontsFolder)
+    .filter (folder)->
+      fs.lstatSync(path.join(fontsFolder, folder)).isDirectory()
+    .forEach (folder)->
+      fs.readdirSync(path.join(fontsFolder, folder))
+        .filter (file)->
+          fs.lstatSync(path.join(fontsFolder, folder, file)).isFile()
+        .forEach (file)->
+          console.log path.join(fontsFolder, folder, file)
+          try
+            fs.unlinkSync path.join(fontsFolder, folder, file)
+          catch e
+            console.log e
+
   gulp.src './app/fonts/**/*.jpg'
     .pipe through.obj (file, enc, cb)->
       tmpFilePath = "./app/tmp/#{randomString(16)}"
@@ -135,8 +150,8 @@ gulp.task 'images-process', ->
       easyimage.resize
         src: file.path
         dst: tmpFilePath
-        height: 240
-        width: 2000 # Set width excesively large so that resize is done by height
+        height: imageHeight
+        width: imageHeight * 10 # Set width excesively large so that resize is done by height
         quality: 100
       .then (image)->
         # Read image data
@@ -164,22 +179,25 @@ gulp.task 'images-process', ->
       , (err)->
         console.log err
         cb()
-    .pipe gulp.dest './public/fonts'
+    .pipe gulp.dest fontsFolder
 
-gulp.task 'images-sprite', ->
-  publicFontsFolder = './public/fonts/'
+imagesPublicSprites = ->
+  fontsFolder = './public/fonts/'
 
-  folders = fs.readdirSync(publicFontsFolder).filter (folder)->
-    fs.lstatSync(publicFontsFolder + folder).isDirectory()
+  folders = fs.readdirSync(fontsFolder).filter (folder)->
+    fs.lstatSync(fontsFolder + folder).isDirectory()
 
   # Delete old files
   folders.forEach (folder)->
-    spritePath = "#{publicFontsFolder}#{folder}/font-sprite.jpg"
-    fs.unlinkSync spritePath
+    spritePath = "#{fontsFolder}#{folder}/font-sprite.jpg"
+    try
+      fs.unlinkSync spritePath
+    catch e
+      console.log e
 
   promisses = []
   folders.forEach (folder)->
-    folderPath = "#{publicFontsFolder}#{folder}/"
+    folderPath = "#{fontsFolder}#{folder}/"
 
     deferred = Q.defer()
     exec 'convert', ["#{folderPath}*.jpg", '-quality', 40, '-background', '#efebe2', '-append', "#{folderPath}font-sprite.jpg"], (err, stdout, stderr)->
@@ -195,3 +213,18 @@ gulp.task 'images-sprite', ->
   Q.all(promisses)
   .then ->
     console.log 'Joinging symbols done'
+
+gulp.task 'images-process-client', imagesProcess('./public/fonts', 240)
+gulp.task 'images-process-server', imagesProcess('./public/fonts-server', 120)
+
+gulp.task 'images-client', ['images-process-client'], imagesDataProcess('./public/fonts', './public/js/fonts.json')
+gulp.task 'images-server', ['images-process-server'], imagesDataProcess('./public/fonts-server', './fonts-server.json')
+
+# Compile images for FE use
+gulp.task 'client', ['images-client'], imagesPublicSprites
+
+# Generate public sprites
+gulp.task 'client-sprites', imagesPublicSprites
+
+# Compile images for BE use
+gulp.task 'server', ['images-server']

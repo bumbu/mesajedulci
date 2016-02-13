@@ -267,7 +267,7 @@ function getImage($fontData, $fontName, $message){
 			$symbolData = getSymbolData($fontData, $symbol);
 
 			if (isset($symbolData['image'])) {
-				$symbolImage = new Image('./public/fonts/'.$fontName.'/'.$symbolData['image'].'.jpg');
+				$symbolImage = new Image('./public/fonts-server/'.$fontName.'/'.$symbolData['image'].'.jpg');
 				$rowImage->overlay($symbolImage, array($widthOffset, 0));
 				unset($symbolImage);
 			}

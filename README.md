@@ -30,16 +30,21 @@ It should look like:
       * B.jpg
       * ...
 
-Running `gulp images` will minimize and optimize images and move them into `public/fonts` folder.
-It will also generate a `public/js/fonts.json` file with data about fonts.
+Run `gulp client` to compile client assets.
+Run `gulp server` to compile serve assets.
 
-Running `gulp images-sprite` will join images into sprites (used for web).
+Client gets images of width 240, while server gets images of width 120.
+You can change that in gulp file (will also require changing a variable on server).
 
-## License
 
-[GNU Public License](http://www.gnu.org/licenses/gpl-3.0.html) (GPL v3)
+## Useful commands
 
-## Test string
+Cut 210 pixels from bottom side of all images in current folder
+`find . -type f -exec mogrify -gravity South -chop 0x210 {} \;`
+
+
+## Test strings
+
 abcdefghijklm
 nopqrstuvwxyz
 0123456789
@@ -47,3 +52,8 @@ nopqrstuvwxyz
 ășțâî
 
 abcdefghijklm\nnopqrstuvwxyz\n0123456789\n-=+:,.!?()<>\nășțâî
+
+
+## License
+
+[GNU Public License](http://www.gnu.org/licenses/gpl-3.0.html) (GPL v3)
