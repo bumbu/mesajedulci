@@ -30,6 +30,7 @@ $f3->route('GET /',
 
 		$f3->set('messagesCount', $message->count());
 		$f3->set('preloadedFooter', 1);
+		$f3->set('preloadedFont', rand(1, 5));
 
 		echo View::instance()->render('layout.html');
 	}
