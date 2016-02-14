@@ -1,4 +1,4 @@
-version = '?v=4'
+version = '?v=5'
 
 ###
   Accents
@@ -225,7 +225,7 @@ controller =
 
   listenTextarea: ->
     $message = $('#textarea')
-    $message.on 'keyup paste cut change', (el)=>
+    $message.on 'focus keyup paste cut change', (el)=>
       @writeText $message.val()
 
     # Render first message
