@@ -1,4 +1,4 @@
-version = '?v=5'
+version = '?v=' + window.VERSION
 
 ###
   Accents
@@ -316,7 +316,6 @@ listenForFromToChange = (controller)->
       $editTo.hide().find('strong').text ''
 
 listenForActionButtons = (controller)->
-  emailRegex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i
   $actionCopy = $('[data-action="copy"]')
 
   $('body').on 'click', '[data-action="edit"]', ->
@@ -367,20 +366,25 @@ listenForActionButtons = (controller)->
   $actionShare = $('[data-action="share"]')
   $actionShare.on 'click', (ev)->
     ev.preventDefault()
+    target = $(this).data('target')
 
     winWidth = 520
     winHeight = 510
     winTop = ($(window).height() / 2) - (winHeight / 2)
     winLeft = ($(window).width() / 2) - (winWidth / 2)
 
-    # title = 'Mesaje Dulci'
-    title = ''
+    title = 'Mesaje Dulci'
+    # title = ''
     # descr = 'Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!'
     descr = ''
     url = URI_ROOT + 'mesaj/' + MESSAGE_ID
     # image = URI_ROOT + 'public/img/fb-cover.jpg'
     image = ''
-    window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url + '&p[images][0]=' + image, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
+
+    if target is 'fb'
+      window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight)
+    else if target is 'ok'
+      window.open("http://www.odnoklassniki.ru/dk?st.cmd=addShare&st._surl=#{url}&title=#{title}")
 
 $ ->
   $preload = $('.preload')

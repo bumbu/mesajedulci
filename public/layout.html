@@ -5,26 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mesaje Dulci</title>
-
-    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.min.js"></script>
-    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.preload.min.js"></script>
-    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/ZeroClipboard.min.js"></script>
-    <script src="<?php echo $URI_ROOT; ?>public/js/main.js?v=5"></script>
-    <script>
-    var URI_ROOT = '<?php echo $URI_ROOT; ?>';
-    var FONTS_DATA = '<?php echo $this->render(Base::instance()->get('fontsFile')); ?>';
-    var PRELOADED_MESSAGE = "<?php echo $preloadedMessage; ?>";
-    var PRELOADED_MESSAGE_BACKUP = 'Alege-ți zahărul\nbrun preferat și\nscrie un mesaj\ndulce celor dragi!';
-    var PRELOADED_FONT = <?php echo $preloadedFont; ?>;
-    var MESSAGE_ID = '<?php echo isset($messageId) ? $messageId : ''; ?>';
-    </script>
-    <link href="<?php echo $URI_ROOT; ?>public/css/style.css?v=3" media="all" rel="stylesheet" />
-
+    <link href="<?php echo $URI_ROOT; ?>public/css/style.css?v=<?php echo $VERSION; ?>" media="all" rel="stylesheet" />
+    <meta property="fb:app_id" content="344439159096152" />
     <meta property="og:title" content="Mesaje Dulci" />
     <meta property="og:description" content="Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!" />
+    <meta property="og:type" content="website" />
     <meta property="og:site_name" content="<?php echo $URI_DOMAIN;?>" />
     <meta property="og:image" content="<?php echo $URI_ROOT; ?><?php echo $coverImage; ?>" />
-    <meta property="fb:app_id" content="344439159096152" />
+    <?php
+    if (isset($messageId)) {
+      echo '<meta property="og:url" content="'. $URI_ROOT .'mesaj/'. $messageId .'" />';
+    }?>
   </head>
   <body>
     <!-- Google Tag Manager -->
@@ -71,5 +62,19 @@
         <div class="preload-progress-done" style="width: 0%"></div>
       </div>
     </div>
+
+    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.min.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.preload.min.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/ZeroClipboard.min.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/main.js?v=<?php echo $VERSION; ?>"></script>
+    <script>
+    var URI_ROOT = '<?php echo $URI_ROOT; ?>';
+    var FONTS_DATA = '<?php echo $this->render(Base::instance()->get('fontsFile')); ?>';
+    var PRELOADED_MESSAGE = "<?php echo $preloadedMessage; ?>";
+    var PRELOADED_MESSAGE_BACKUP = 'Alege-ți zahărul\nbrun preferat și\nscrie un mesaj\ndulce celor dragi!';
+    var PRELOADED_FONT = <?php echo $preloadedFont; ?>;
+    var MESSAGE_ID = '<?php echo isset($messageId) ? $messageId : ''; ?>';
+    var VERSION = '<?php echo $VERSION; ?>';
+    </script>
   </body>
 </html>
