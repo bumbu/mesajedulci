@@ -161,14 +161,60 @@ controller =
 
     return sum
 
+  preSplitText: (text)->
+    inputArea = @totalWidth * @totalHeight
+    messageArea = @computeWidth(text.replace('\n', ' '), @maxHeight) * @maxHeight
+
+    # Get ratio between available area and text area at max height
+    areaRatio = inputArea / messageArea
+
+    # Get max possible height
+    maxHeight = Math.min(@maxHeight, @maxHeight * inputArea)
+    maxWidth = @totalWidth
+
+    rows = []
+    lines = text.split('\n')
+
+    # Split each line in text rows that would fit given max height
+    for line in lines
+      # Check if line fits in row entirely
+      if @computeWidth(line, maxHeight) <= maxWidth
+        rows.push line
+      else
+        # Split by spaces and fit as many words per line as possible
+        words = line.split(' ')
+        rowWidth = 0
+        prevIndex = 0
+        currIndex = 0
+        while currIndex < words.length
+          if @computeWidth(words.slice(prevIndex, currIndex + 1).join(' '), maxHeight) > maxWidth
+            # It is just one word and it is too big
+            if prevIndex is currIndex
+              rows.push(words[prevIndex])
+              prevIndex += 1
+            else
+              rows.push(words.slice(prevIndex, currIndex).join(' '))
+              prevIndex = currIndex
+
+          currIndex += 1
+
+        if prevIndex < currIndex
+          rows.push(words.slice(prevIndex, currIndex).join(' '))
+
+    newText = rows.join('\n').trim()
+
+    return newText
+
   computeLineHeight: (text)->
+    text = @preSplitText text
+
     # Compute min line height based on widest line
     preliminaryHeight = Infinity
     lines = text.split('\n')
 
     for line in lines
-      lineWidth = @computeWidth line, 100 # Compute character width if its height is 100
-      lineHeight = (100 * (@totalWidth / lineWidth))
+      lineWidth = @computeWidth line, @maxHeight # Compute character width if its height is 100
+      lineHeight = (@maxHeight * (@totalWidth / lineWidth))
       preliminaryHeight = Math.min(preliminaryHeight, lineHeight)
 
     # Compute height based on number of rows
@@ -195,7 +241,7 @@ controller =
     # Cache last text
     if text?
       text = text.substr(0, 200)
-      @lastText = text
+      @lastText = @preSplitText text
     # If no text, get from cache
     else if @lastText?
       text = @lastText
