@@ -63,18 +63,19 @@
       </div>
     </div>
 
-    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.min.js"></script>
-    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.preload.min.js"></script>
-    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/ZeroClipboard.min.js"></script>
-    <script src="<?php echo $URI_ROOT; ?>public/js/main.js?v=<?php echo $VERSION; ?>"></script>
     <script>
     var URI_ROOT = '<?php echo $URI_ROOT; ?>';
     var FONTS_DATA = '<?php echo $this->render(Base::instance()->get('fontsFile')); ?>';
     var PRELOADED_MESSAGE = "<?php echo $preloadedMessage; ?>";
-    var PRELOADED_MESSAGE_BACKUP = 'Alege-ți zahărul\nbrun preferat și\nscrie un mesaj\ndulce celor dragi!';
+    var PRELOADED_MESSAGE_BACKUP = 'Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!';
     var PRELOADED_FONT = <?php echo $preloadedFont; ?>;
     var MESSAGE_ID = '<?php echo isset($messageId) ? $messageId : ''; ?>';
     var VERSION = '<?php echo $VERSION; ?>';
+    var MODE = '<?php echo $mode; ?>';
     </script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.min.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.preload.min.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/vendor/ZeroClipboard.min.js"></script>
+    <script src="<?php echo $URI_ROOT; ?>public/js/main.js?v=<?php echo $VERSION; ?>"></script>
   </body>
 </html>

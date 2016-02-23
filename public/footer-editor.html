@@ -1,24 +1,10 @@
 <div class="footer-block">
   <div class="from-to">
-    <span class="edit-from" style="display: none"><i>De la:</i><strong></strong></span>
-    <span class="edit-to" style="display: none"><i>Către:</i><strong></strong></span>
+    <textarea name="message" id="textarea" cols="30" rows="10" placeholder="Alege-ți zahărul&#13;&#10;brun preferat și&#13;&#10;scrie un mesaj&#13;&#10;dulce celor dragi!"></textarea>
+    <span class="edit-block edit-from"><i>De la:</i><input type="text" value="<?php if(isset($preloadedFrom)){echo $preloadedFrom;}?>" name="from" id="create-from"></span>
+    <span class="edit-block edit-to"><i>Către:</i><input type="text" value="<?php if(isset($preloadedTo)){echo $preloadedTo;}?>" name="to" id="create-to"></span>
   </div>
   <div class="navigation navigation-large">
-    <div class="action-wrapper">
-      <div class="action-box">
-        <form action="">
-          <textarea name="message" id="textarea" cols="30" rows="10" placeholder="Alege-ți zahărul&#13;&#10;brun preferat și&#13;&#10;scrie un mesaj&#13;&#10;dulce celor dragi!"></textarea>
-          <input type="text" name="from" placeholder="De la:" id="create-from">
-          <input type="text" name="to" placeholder="Către:" id="create-to">
-          <button type="submit" style="display: none;"></button>
-        </form>
-        <div class="arrow"></div>
-      </div>
-      <a class="action" data-action="edit">
-        <span class="icon icon-edit"></span><br>
-        <span class="text">Adaugă text</span>
-      </a>
-    </div>
     <a class="action" data-action="prev-font">
       <span class="icon icon-chevron-left"></span><br>
     </a>

@@ -99,12 +99,12 @@ controller =
     while i < str.length
       if i < str.length - 1
         if @isSymbol(str.substr(i, 2))
-          cb(str.substr(i, 2))
+          cb(str.substr(i, 2), i)
           i++
         else
-          cb(str[i])
+          cb(str[i], i)
       else
-        cb(str[i])
+        cb(str[i], i)
 
       i++
 
@@ -237,7 +237,7 @@ controller =
 
     return max
 
-  writeText: (text=null)->
+  writeText: (text=null, carretIndex=-1)->
     # Cache last text
     if text?
       text = text.substr(0, 200)
@@ -245,6 +245,9 @@ controller =
     # If no text, get from cache
     else if @lastText?
       text = @lastText
+
+    # Move from 1 indexing to 0 indexing
+    carretIndex -= 1
 
     text = cleanUpSpecialChars(text)
     text = unescape(text)
@@ -254,28 +257,67 @@ controller =
     maxCharacterWidth = Math.round @maxCharacterWidthByHeight(lineHeight)
     spaceHalfWidth = Math.floor(@getSymbolData(' ', lineHeight).width / 2)
 
-    newText = "<span style='padding: 0 #{spaceHalfWidth}px;'>" # First tag
-    @each text, (symbol)=>
+    spaceFactory = (additionalClass)->
+      "<span class='space'><strong class='#{additionalClass}' style='height: #{lineHeight}px;'></strong></span>"
+
+    newText = ''
+
+    if carretIndex is -1 and @state is 'WRITE'
+      newText += spaceFactory('with-carret')
+
+    newText += "<span style='padding: 0 #{spaceHalfWidth}px;'>" # First word
+    @each text, (symbol, index)=>
       symbolData = @getSymbolData(symbol, lineHeight)
       symbolOffset = symbolData.index * 240 * maxCharacterWidth / spriteWidth
+      additionalClass = ''
+
+      if index is carretIndex and @state is 'WRITE'
+        additionalClass = 'with-carret'
 
       if symbolData.symbol is ' '
-        newText += "</span><span style='padding: 0 #{spaceHalfWidth}px;'>"
+        newText += "</span>#{spaceFactory(additionalClass)}<span style='padding: 0 #{spaceHalfWidth}px;'>"
       else if symbolData.symbol is '\n'
-        newText += "</span><br><span style='padding: 0 #{spaceHalfWidth}px;'>"
+        newText += "</span><br>#{spaceFactory(additionalClass)}<span style='padding: 0 #{spaceHalfWidth}px;'>"
       else
-        newText += "<i style='width: #{Math.floor symbolData.width}px; height: #{lineHeight}px;'><img style='width:#{maxCharacterWidth}px;margin-top: -#{symbolOffset}px' src='#{URI_ROOT}public/fonts/#{@fontGroup}/font-sprite.jpg#{version}'></i>"
-    newText += '</span>' # Last tag
+        newText += "<strong class='letter #{additionalClass}' data-index='#{index}'><i style='width: #{Math.floor symbolData.width}px; height: #{lineHeight}px;'><img style='width:#{maxCharacterWidth}px;margin-top: -#{symbolOffset}px' src='#{URI_ROOT}public/fonts/#{@fontGroup}/font-sprite.jpg#{version}'></i></strong>"
+    newText += "</span>" # Last tag
 
     @$text.html newText
 
+    @firstRender = false
+
+  listenMessage: ->
+    $('.message').on 'click', (ev)=>
+      return false if @state isnt 'WRITE'
+
+      $target = $(ev.target)
+      $textarea = $('#textarea')
+
+      if $target.closest('[data-index]').length
+        index = $target.closest('[data-index]').data('index') + 1
+        index = Math.min(index, $textarea.val().length)
+      else
+        index = $textarea.val().length
+
+      $textarea.focus()
+      $textarea.get(0).selectionStart = index
+      $textarea.get(0).selectionEnd = index
+      @writeText $textarea.val(), index
+
   listenTextarea: ->
     $message = $('#textarea')
-    $message.on 'focus keyup paste cut change', (el)=>
-      @writeText $message.val()
 
-    # Render first message
-    # @writeText $message.val()
+    $(window).on 'click keyup', (ev)=>
+      return false if @state isnt 'WRITE'
+      return false if $(ev.target).closest('.message').length
+
+      if not $message.is(':focus')
+        @writeText $message.val(), -1
+
+    $message.on 'focus keyup paste cut', (ev)=>
+      return false if @state isnt 'WRITE'
+
+      @writeText $message.val(), (if $message.get(0).selectionEnd? then $message.get(0).selectionEnd else $message.val().length)
 
   listenSelect: ->
     $select = $('#font')
@@ -297,18 +339,35 @@ controller =
     @totalHeight = @$text.parent().height() - 1
     @totalWidth = @$text.width() - 1 # Browser may ceil a float value
 
+  setState: (state)->
+    if state in ['READ', 'WRITE'] and state isnt @state
+      @state = state
+
+      if @state is 'READ'
+        1
+      else if @state is 'WRITE'
+        2
+
   start: ->
     @$text = $('#message')
+    @state = window.MODE || 'WRITE'
+    @firstRender = true
 
     @fontGroup = "font#{PRELOADED_FONT}"
     @minHeight = 34
     @maxHeight = 120
     @computeMessageBoxSizes()
 
+    $('#textarea').focus()
     @writeText PRELOADED_MESSAGE || PRELOADED_MESSAGE_BACKUP
+    @listenMessage()
     @listenTextarea()
     @listenSelect()
     @listenResize()
+
+###
+# External helpers
+###
 
 listenForFontChange = (controller)->
   $wrappers = $('.content-wrapper')
@@ -345,27 +404,23 @@ listenForFontChange = (controller)->
 
 listenForFromToChange = (controller)->
   $createFrom = $('#create-from') # input
-  $editFrom = $('.edit-from')
   $createTo = $('#create-to') # input
-  $editTo = $('.edit-to')
+  $fromToInputs = $('.edit-block input')
+  $textFrom = $('.text-from')
+  $textTo = $('.text-to')
 
-  $createFrom.on 'input paste keyup cut change', ->
-    if $createFrom.val()
-      $editFrom.show().find('strong').text $createFrom.val()
-    else
-      $editFrom.hide().find('strong').text ''
+  $fromToInputs.on 'input paste keyup cut change focusout', ->
+    $this = $(this)
+    $this[if $this.val() then 'addClass' else 'removeClass']('has-content')
 
-  $createTo.on 'input paste keyup cut change', ->
-    if $createTo.val()
-      $editTo.show().find('strong').text $createTo.val()
-    else
-      $editTo.hide().find('strong').text ''
+    $textFrom[if $createFrom.val() then 'show' else 'hide']().find('strong').text $createFrom.val()
+    $textTo[if $createTo.val() then 'show' else 'hide']().find('strong').text $createTo.val()
+
+  # Trigger change to update classes
+  $fromToInputs.trigger('change')
 
 listenForActionButtons = (controller)->
   $actionCopy = $('[data-action="copy"]')
-
-  $('body').on 'click', '[data-action="edit"]', ->
-    $(this).toggleClass("active").siblings('.action-box').toggleClass('active')
 
   $('body').on 'click', '[data-action="save"]', =>
     # Save on server
@@ -379,6 +434,8 @@ listenForActionButtons = (controller)->
         font: controller.fontGroup
       dataType: 'json'
       success: (data)->
+        controller.setState 'READ'
+
         # Scroll footer
         $('.footer-inner').animate {left: '-200%'}, ->
           # Update uri
@@ -389,13 +446,16 @@ listenForActionButtons = (controller)->
           $actionCopy
             .attr('data-clipboard-text', URI_ROOT + 'mesaj/' + MESSAGE_ID)
 
+
   $('body').on 'click', '[data-action="try"]', (ev)=>
     ev.preventDefault()
+    controller.setState 'WRITE'
     $('.footer-inner').animate {left: '-100%'}, ->
       history?.pushState?({}, document.title, URI_ROOT)
       $('#create-from').val('').trigger('change')
       $('#create-to').val('').trigger('change')
       $('#textarea').val($('#textarea').val() || PRELOADED_MESSAGE || '').trigger('change')
+      $('#message').click()
 
   copyInstance = new ZeroClipboard(document.getElementById("copy-button"))
 

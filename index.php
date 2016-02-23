@@ -19,6 +19,7 @@ $f3->set('footerEditor','footer-editor.html');
 $f3->set('footerShare','footer-share.html');
 $f3->set('preloadedMessage', '');
 $f3->set('coverImage', 'public/img/fb-cover.png');
+$f3->set('mode', 'WRITE');
 
 header('Access-Control-Allow-Origin: static.ak.facebook.com');
 
@@ -46,6 +47,7 @@ $f3->route('GET /mesaj/@message',
 		$f3->set('messageId', $f3->get('PARAMS.message'));
 		$f3->set('coverImage', 'imagine/'.$f3->get('PARAMS.message'));
 		$f3->set('messagesCount', $count);
+		$f3->set('mode', 'READ');
 
 		if($message->dry()){
 			// Nothing found, redirect to main page
