@@ -246,6 +246,10 @@ controller =
     else if @lastText?
       text = @lastText
 
+    # If no text then render default text
+    if not text
+      text = PRELOADED_MESSAGE || PRELOADED_MESSAGE_BACKUP
+
     # Move from 1 indexing to 0 indexing
     carretIndex -= 1
 
@@ -359,7 +363,7 @@ controller =
     @computeMessageBoxSizes()
 
     $('#textarea').focus()
-    @writeText PRELOADED_MESSAGE || PRELOADED_MESSAGE_BACKUP
+    @writeText()
     @listenMessage()
     @listenTextarea()
     @listenSelect()
