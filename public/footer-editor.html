@@ -5,6 +5,10 @@
     <span class="edit-block edit-to"><i>Către:</i><input type="text" value="<?php if(isset($preloadedTo)){echo $preloadedTo;}?>" name="to" id="create-to"></span>
   </div>
   <div class="navigation navigation-large">
+    <a class="action only-mobile" data-action="save">
+      <span class="icon icon-share"></span><br>
+      <span class="text">Distribuie</span>
+    </a>
     <div class="action-content">
     <div class="action-content-inner" style="left: -<?php echo ($preloadedFont - 1) * 100; ?>%">
       <div class="content-wrapper <?php if ($preloadedFont == 1) echo 'active';?>" data-type="font1">
@@ -44,7 +48,7 @@
       </div>
     </div>
     </div>
-    <a class="action" data-action="save">
+    <a class="action hide-mobile" data-action="save">
       <span class="icon icon-share"></span><br>
       <span class="text">Distribuie</span>
     </a>
