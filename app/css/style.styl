@@ -76,8 +76,9 @@ a
   display table
   height 100%
   width 100%
+  max-width 1200px
   padding 150px 0 195px
-  margin -150px 0 -195px
+  margin -150px auto -195px
   box-sizing border-box
 
 .message
@@ -85,10 +86,10 @@ a
   vertical-align middle
   text-align center
   font-size 0
+  position relative
 
 .message-body
-  width 90%
-  margin 0 auto
+  margin 0 72px
   cursor text
 
   img
@@ -125,6 +126,18 @@ a
 
       img
         height auto
+
+.message-navigation
+  .action
+    position absolute
+    top 50%
+    margin -16px 0 0
+
+    &-left
+      left 16px
+
+    &-right
+      right 16px
 
 .footer
   height 195px
@@ -408,6 +421,7 @@ a
     &:hover,
     &.active,
     .action:hover &,
+    .action:focus &,
     .action.active &
       background-position 0 0
 
@@ -416,6 +430,7 @@ a
     &:hover,
     &.active,
     .action:hover &,
+    .action:focus &,
     .action.active &
       background-position 0 -38px
 
@@ -424,6 +439,7 @@ a
     &:hover,
     &.active,
     .action:hover &,
+    .action:focus &,
     .action.active &
       background-position 0 -76px
 
@@ -432,6 +448,7 @@ a
     &:hover,
     &.active,
     .action:hover &,
+    .action:focus &,
     .action.active &
       background-position 0 -114px
 
@@ -440,6 +457,7 @@ a
     &:hover,
     &.active,
     .action:hover &,
+    .action:focus &,
     .action.active &
       background-position 0 -152px
 
@@ -448,6 +466,7 @@ a
     &:hover,
     &.active,
     .action:hover &,
+    .action:focus &,
     .action.active &
       background-position 0 -190px
 
@@ -456,6 +475,7 @@ a
     &:hover,
     &.active,
     .action:hover &,
+    .action:focus &,
     .action.active &
       background-position 0 -228px
 

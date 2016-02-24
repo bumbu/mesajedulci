@@ -307,6 +307,7 @@ controller =
       $textarea.get(0).selectionStart = index
       $textarea.get(0).selectionEnd = index
       @writeText $textarea.val(), index
+      return true
 
   listenTextarea: ->
     $message = $('#textarea')
@@ -439,6 +440,8 @@ listenForActionButtons = (controller)->
       dataType: 'json'
       success: (data)->
         controller.setState 'READ'
+        # Hide slide arrows
+        $('.message-wrapper .action').hide()
 
         # Scroll footer
         $('.footer-inner').animate {left: '-200%'}, ->
@@ -460,6 +463,8 @@ listenForActionButtons = (controller)->
       $('#create-to').val('').trigger('change')
       $('#textarea').val($('#textarea').val() || PRELOADED_MESSAGE || '').trigger('change')
       $('#message').click()
+      # Show slide arrows
+      $('.message-wrapper .action').show()
 
   copyInstance = new ZeroClipboard(document.getElementById("copy-button"))
 

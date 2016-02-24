@@ -46,6 +46,14 @@
     <div class="message-wrapper">
       <div class="message">
         <div class="message-body" id="message"></div>
+        <div class="message-navigation">
+          <a href="prev" class="action action-left" data-action="prev-font" <?php echo $mode=='READ'?'style="display: none"':'' ?>>
+            <span class="icon icon-chevron-left"></span><br>
+          </a>
+          <a href="next" class="action action-right" data-action="next-font" <?php echo $mode=='READ'?'style="display: none"':'' ?>>
+            <span class="icon icon-chevron-right"></span><br>
+          </a>
+        </div>
       </div>
     </div>
     <div class="footer">
