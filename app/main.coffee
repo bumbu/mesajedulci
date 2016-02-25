@@ -94,11 +94,11 @@ controller =
   isSymbol: (symbol)->
     symbol.toUpperCase() of @getSymbolMap()
 
-  each: (str, cb)->
+  each: (str, keepSingle=-1, cb)->
     i = 0
     while i < str.length
       if i < str.length - 1
-        if @isSymbol(str.substr(i, 2))
+        if i isnt keepSingle and i+1 isnt keepSingle and @isSymbol(str.substr(i, 2))
           cb(str.substr(i, 2), i)
           i++
         else
@@ -152,7 +152,7 @@ controller =
 
   computeWidth: (text, height=100)->
     sum = 0
-    @each text, (symbol)=>
+    @each text, -1, (symbol)=>
       symbolData = @getSymbolData(symbol, height)
       sum += symbolData.width
 
@@ -270,7 +270,7 @@ controller =
       newText += spaceFactory('with-carret')
 
     newText += "<span style='padding: 0 #{spaceHalfWidth}px;'>" # First word
-    @each text, (symbol, index)=>
+    @each text, carretIndex, (symbol, index)=>
       symbolData = @getSymbolData(symbol, lineHeight)
       symbolOffset = symbolData.index * 240 * maxCharacterWidth / spriteWidth
       additionalClass = ''
