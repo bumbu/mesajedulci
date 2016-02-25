@@ -53,6 +53,11 @@
           <a href="next" class="action action-right" data-action="next-font" <?php echo $mode=='READ'?'style="display: none"':'' ?>>
             <span class="icon icon-chevron-right"></span><br>
           </a>
+          <div class="message-navigation__overlay overlay__tooltip">2. Alegi zahărul</div>
+        </div>
+        <div class="message__overlay overlay__component">
+          <div class="message__tooltip overlay__tooltip">1. Scrii mesajul</div>
+          <button class="message__overlay-action overlay__tooltip" data-action="close-help">Încearcă</button>
         </div>
       </div>
     </div>
@@ -69,6 +74,9 @@
       <div class="preload-progress">
         <div class="preload-progress-done" style="width: 0%"></div>
       </div>
+    </div>
+    <div class="overlay">
+      <button class="overlay__close icon icon-close" data-action="close-help"></button>
     </div>
 
     <script>

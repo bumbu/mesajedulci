@@ -1,0 +1,61 @@
+// Breakpoints
+// ===========
+media_queries = {
+  mobile  : "(max-width: 567px)",
+  tablet  : "(min-width: 568px) and (max-width: 939px)",
+  desktop : "(min-width: 940px) and (max-width: 1199px)",
+  large   : "(min-width: 1200px)"
+}
+
+bp(breakpoints)
+  conditions = ()
+  for breakpoint in breakpoints
+    push(conditions, media_queries[breakpoint])
+  conditions = join(", ", conditions)
+  @media conditions
+    {block}
+
+
+// Animations
+// ==========
+@keyframes cursor {
+  from {
+    opacity 0
+  }
+  5% {
+    opacity 1
+  }
+  50% {
+    opacity 1
+  }
+  55% {
+    opacity 0
+  }
+  to {
+    opacity 0
+  }
+}
+
+trbl(t, args...)
+  // Top
+  top t
+
+  // Right
+  if length(args) > 0
+    right args[0]
+  else
+    right t
+
+  // Bottom
+  if length(args) > 1
+    bottom args[1]
+  else
+    bottom t
+
+  // Left
+  if length(args) > 2
+    left args[2]
+  else if length(args) > 0
+    left args[0]
+  else
+    left t

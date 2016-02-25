@@ -3,8 +3,13 @@
     <textarea name="message" id="textarea" cols="30" rows="10" placeholder="Alege-ți zahărul&#13;&#10;brun preferat și&#13;&#10;scrie un mesaj&#13;&#10;dulce celor dragi!"></textarea>
     <span class="edit-block edit-from"><i>De la:</i><input type="text" value="<?php if(isset($preloadedFrom)){echo $preloadedFrom;}?>" name="from" id="create-from"></span>
     <span class="edit-block edit-to"><i>Către:</i><input type="text" value="<?php if(isset($preloadedTo)){echo $preloadedTo;}?>" name="to" id="create-to"></span>
+    <div class="from-to__overlay overlay__tooltip">3. Semnezi</div>
   </div>
   <div class="navigation navigation-large">
+    <a class="action" data-action="help">
+      <span class="icon icon-help"></span><br>
+      <span class="text">Ajutor</span>
+    </a>
     <a class="action only-mobile" data-action="save">
       <span class="icon icon-share"></span><br>
       <span class="text">Distribuie</span>
@@ -52,5 +57,6 @@
       <span class="icon icon-share"></span><br>
       <span class="text">Distribuie</span>
     </a>
+    <div class="action__overlay overlay__tooltip">4. Distribuie</div>
   </div>
 </div>

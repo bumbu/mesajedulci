@@ -466,6 +466,15 @@ listenForActionButtons = (controller)->
       # Show slide arrows
       $('.message-wrapper .action').show()
 
+  $('body').on 'click', '[data-action="help"]', (ev)=>
+    ev.preventDefault()
+    $('body').addClass('with-overlay')
+
+  $('body').on 'click', '[data-action="close-help"]', (ev)=>
+    ev.preventDefault()
+    $('body').removeClass('with-overlay')
+    $('#textarea').focus()
+
   copyInstance = new ZeroClipboard(document.getElementById("copy-button"))
 
   copyInstance.on "ready", ( readyEvent )->

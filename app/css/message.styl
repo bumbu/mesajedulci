@@ -1,0 +1,146 @@
+.message-wrapper
+  display table
+  height 100%
+  width 100%
+  max-width 1200px
+  padding 150px 0 195px
+  margin -150px auto -195px
+  box-sizing border-box
+
+  +bp(mobile)
+    display block
+    height auto
+    padding 0
+    margin 20px 0
+
+.message
+  display table-cell
+  vertical-align middle
+  text-align center
+  font-size 0
+  position relative
+
+  +bp(mobile)
+    display block
+
+.message-body
+  margin 0 72px
+  cursor text
+
+  +bp(mobile)
+    margin 0 20px
+
+  img
+    width auto
+
+  span
+    display inline-block
+    padding 0 10px
+
+    &.space
+      width 0
+      padding 0
+
+
+    strong
+      display inline-block
+      position relative
+
+      &.with-carret
+        &:after
+          content ''
+          position absolute
+          top 10%
+          bottom 13%
+          right -3px
+          width 3px
+          background $c-link
+          animation cursor 2s linear 0s infinite
+          z-index $z-index-carret
+
+    i
+      display inline-block
+      overflow hidden
+
+      img
+        height auto
+
+.message-navigation
+  .action
+    position absolute
+    top 50%
+    margin -16px 0 0
+
+    &-left
+      left 16px
+
+    &-right
+      right 16px
+
+    +bp(mobile)
+      position relative
+      top 0
+      margin 10px 25px
+      display inline-block
+      left auto
+      right auto
+
+  &__overlay
+    position absolute
+    top 50%
+    left 20px
+    background url('../img/arrow-2.png') no-repeat 0 bottom
+    padding 0 0 50px
+    margin -86px 0 0
+
+    +bp(mobile)
+      top 100%
+      left 50%
+      margin -36px 0 0 -55px
+      background none
+
+    +bp(large)
+      left -32px
+      margin -86px 0 0
+      background-position 50px bottom
+
+.message__overlay
+  position absolute
+  trbl 0
+  border 1px solid rgba($c-bg, .5)
+  border-radius 20px
+  z-index: -1 + $z-index-overlay-component
+
+  margin 10px 82px
+
+  +bp(mobile)
+    margin 0 30px
+
+  &-action
+    position absolute
+    top 50%
+    left 50%
+    margin -10px 0 0 -64px
+    background none
+    border 1px solid white
+    border-radius 8px
+    padding 6px 24px
+    font-weight 300
+    cursor pointer
+
+    &:hover,
+    &:focus
+      border-color $c-link
+
+.message__tooltip
+  position absolute
+  top -30px
+  right -72px
+  padding 0 0 128px 54px
+  background url('../img/arrow-1.png') no-repeat 40% bottom
+
+  +bp(mobile)
+    top -50px
+    right 0
+    padding 0 0 96px 32px
+    background-size 62px 90px

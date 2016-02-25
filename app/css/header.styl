@@ -1,0 +1,46 @@
+.header
+  height 150px
+  text-align center
+  position relative
+
+  +bp(mobile)
+    height auto
+
+  .headnote
+    position absolute
+    top 4px
+    right 0
+    font-size 13px
+    margin 16px
+
+    +bp(mobile)
+      position relative
+      top 0
+
+    a
+      text-decoration none
+      &:hover
+        text-decoration underline
+
+  .facebook
+    position absolute
+    top 0
+    left 0
+    margin 16px
+
+    +bp(mobile)
+      position relative
+
+
+  .logo
+    padding 27px 0 0
+
+    +bp(mobile)
+      padding-top 10px
+
+  .messages-count
+    display: inline-block;
+    line-height: 20px;
+    font-size: 13px;
+    vertical-align: 3px;
+    padding: 0 0 0 5px;

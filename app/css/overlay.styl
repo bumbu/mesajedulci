@@ -1,0 +1,34 @@
+.overlay
+  display none
+  background rgba(#000, .38)
+  position absolute
+  trbl 0
+  z-index $z-index-overlay
+
+  .with-overlay &
+    display block
+
+  &__close
+    border 0
+    position absolute
+    top 16px
+    right 16px
+    cursor pointer
+
+.overlay__component
+  display none
+
+  .with-overlay &
+    display block
+
+.overlay__tooltip
+  display none
+  color white
+  font-size 20px
+  z-index $z-index-overlay-component
+
+  +bp(mobile)
+    font-size 16px
+
+  .with-overlay &
+    display block
