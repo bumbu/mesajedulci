@@ -169,7 +169,7 @@ controller =
     areaRatio = inputArea / messageArea
 
     # Get max possible height
-    maxHeight = Math.min(@maxHeight, @maxHeight * inputArea)
+    maxHeight = Math.min(@maxHeight, @maxHeight * areaRatio)
     maxWidth = @totalWidth
 
     rows = []
