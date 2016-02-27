@@ -63,6 +63,29 @@ symbolDecodingMap = {}
 for symbol, encoding of symbolEncodingMap
   symbolDecodingMap[encoding] = symbol
 
+cookie =
+  setCookie: (name, value, days) ->
+    if days
+      date = new Date()
+      date.setTime date.getTime() + (days * 24 * 60 * 60 * 1000)
+      expires = "; expires=" + date.toGMTString()
+    else
+      expires = ""
+    document.cookie = name + "=" + value + expires + "; path=/"
+  getCookie: (name) ->
+    nameEQ = name + "="
+    ca = document.cookie.split(";")
+    i = 0
+
+    while i < ca.length
+      c = ca[i]
+      c = c.substring(1, c.length)  while c.charAt(0) is " "
+      return c.substring(nameEQ.length, c.length)  if c.indexOf(nameEQ) is 0
+      i++
+    null
+  deleteCookie: (name) ->
+    @setCookie name, "", -1
+
 controller =
   encodeSymbol: (symbol)->
     if symbol of symbolEncodingMap
@@ -465,6 +488,8 @@ listenForActionButtons = (controller)->
       $('#message').click()
       # Show slide arrows
       $('.message-wrapper .action').show()
+      # Check if it is first time
+      checkForFirstTime(controller)
 
   $('body').on 'click', '[data-action="help"]', (ev)=>
     ev.preventDefault()
@@ -510,6 +535,13 @@ listenForActionButtons = (controller)->
     else if target is 'ok'
       window.open("http://www.odnoklassniki.ru/dk?st.cmd=addShare&st._surl=#{url}&title=#{title}")
 
+checkForFirstTime = (controller)->
+  if controller.state is 'WRITE' and not cookie.getCookie('seen')
+    # Show help view
+    $('body').addClass('with-overlay')
+
+    cookie.setCookie('seen', true, 300)
+
 $ ->
   $preload = $('.preload')
   $preloadProgress = $('.preload-progress-done')
@@ -523,6 +555,7 @@ $ ->
       listenForFontChange controller
       listenForFromToChange controller
       listenForActionButtons controller
+      checkForFirstTime controller
 
     # Preload other fonts
     fontSprites = []
