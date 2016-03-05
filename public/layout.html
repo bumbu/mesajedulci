@@ -28,7 +28,6 @@
     })(window,document,'script','dataLayer','GTM-N9LVK8');</script>
     <!-- End Google Tag Manager -->
     <div class="header">
-      <div class="headnote"><a href="https://www.facebook.com/CinciInimioare/" target="_blank">O inițiativă Zahăr Cinci Inimioare</a></div>
       <div class="facebook">
         <div id="fb-root"></div>
         <script>(function(d, s, id) {
@@ -40,6 +39,7 @@
         }(document, 'script', 'facebook-jssdk'));</script>
         <div class="fb-like" data-href="https://www.facebook.com/CinciInimioare" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
         <div class="messages-count">Mesaje trimise: <?php echo $messagesCount;?></div>
+        <div class="messages-invitation">Urmărește-ne pe facebook!</div>
       </div>
       <div class="logo"><a href="<?php echo $URI_ROOT; ?>" data-action="try"><img src="<?php echo $URI_ROOT; ?>public/img/logo.jpg" alt="" width="179" height="91"></a></div>
     </div>
@@ -68,6 +68,7 @@
         <?php echo $this->render(Base::instance()->get('footerEditor')); ?>
         <?php echo $this->render(Base::instance()->get('footerShare')); ?>
       </div>
+      <div class="footnote"><a href="https://www.facebook.com/CinciInimioare/" target="_blank">O inițiativă Zahăr Cinci Inimioare</a></div>
       <div class="footer-clearfix"></div>
     </div>
     <div class="preload">

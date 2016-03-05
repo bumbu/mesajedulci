@@ -5,7 +5,7 @@
   position relative
 
   +bp(mobile)
-    height 320px
+    height 370px
 
   .footer-clearfix
     display table
@@ -266,3 +266,21 @@
     position absolute
     top 0
     left -9999px
+
+  .footnote
+    position absolute
+    bottom 4px
+    right 0
+    font-size 13px
+    margin 6px 12px
+
+    +bp(mobile)
+      // position relative
+      bottom 6px
+      left 0
+      right 0
+
+    a
+      text-decoration none
+      &:hover
+        text-decoration underline

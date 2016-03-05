@@ -6,22 +6,6 @@
   +bp(mobile)
     height auto
 
-  .headnote
-    position absolute
-    top 4px
-    right 0
-    font-size 13px
-    margin 16px
-
-    +bp(mobile)
-      position relative
-      top 0
-
-    a
-      text-decoration none
-      &:hover
-        text-decoration underline
-
   .facebook
     position absolute
     top 0
@@ -48,3 +32,14 @@
     font-size: 13px;
     vertical-align: 3px;
     padding: 0 0 0 5px;
+
+  .messages-invitation
+    text-align left
+    padding 10px 0 0
+    font-size 12px
+    max-width 85px
+
+    +bp(mobile)
+      text-align center
+      padding 10px 0
+      max-width 99999px
