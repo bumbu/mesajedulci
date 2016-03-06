@@ -1,37 +1,33 @@
 <div class="footer-block">
   <div class="from-to">
     <?php if(isset($preloadedFrom) && $preloadedFrom){?>
-    <span class="text-from"><i>De la:</i><strong><?php echo $preloadedFrom;?></strong></span>
-    <?php }else{ ?>
-    <span class="text-from" style="display: none;"><i>De la:</i><strong></strong></span>
+    <span class="text-from"><i><?php echo $from; ?></i><strong><?php echo $preloadedFrom;?></strong></span>
     <?php } ?>
     <?php if(isset($preloadedTo) && $preloadedTo){?>
-    <span class="text-to"><i>Către:</i><strong><?php echo $preloadedTo;?></strong></span>
-    <?php }else{ ?>
-    <span class="text-to" style="display: none;"><i>Către:</i><strong></strong></span>
+    <span class="text-to"><i><?php echo $to; ?></i><strong><?php echo $preloadedTo;?></strong></span>
     <?php } ?>
   </div>
   <div class="actions">
     <a class="action" data-action="try">
       <span class="icon icon-chevron-left"></span><br>
-      <span class="text">Înapoi</span>
+      <span class="text"><?php echo $back; ?></span>
     </a>
     <a class="action" data-action="share" data-target="fb">
       <span class="icon icon-facebook"></span><br>
-      <span class="text">facebook</span>
+      <span class="text"><?php echo $facebook;?></span>
     </a>
     <a class="action" data-action="share" data-target="ok">
       <span class="icon icon-ok"></span><br>
-      <span class="text">Odnoklassniki</span>
+      <span class="text"><?php echo $odnoklassniki;?></span>
     </a>
     <div class="action-wrapper no-hover hide-mobile">
       <div class="action-box">
-        <div class="alert">Copiat cu succes!</div>
+        <div class="alert"><?php echo $copy_success;?></div>
         <div class="arrow"></div>
       </div>
       <a class="action" data-action="copy" data-clipboard-text="" id="copy-button">
         <span class="icon icon-share"></span><br>
-        <span class="text">Copie link</span>
+        <span class="text"><?php echo $copy_link;?></span>
       </a>
     </div>
   </div>

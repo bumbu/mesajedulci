@@ -11,6 +11,33 @@ if ((float)PCRE_VERSION<7.9)
 // Load configuration
 $f3->config('config.ini');
 
+// Detect language
+$lang = 'ro';
+if (isset($_COOKIE['lang'])) {
+	$lang = $_COOKIE['lang'];
+}
+if (isset($_GET['lang'])) {
+	$lang = $_GET['lang'];
+	setcookie('lang', $lang,time() + (86400 * 365)); // One year
+}
+if ($lang !== 'ro' && $lang !== 'ru') {
+	$lang = 'ro';
+}
+
+$f3->set('lang', $lang);
+$f3->set('LANGUAGE', $lang);
+
+if ($lang === 'ro') {
+	$font_first = 1;
+	$font_last = 5;
+} else if ($lang === 'ru') {
+	$font_first = 6;
+	$font_last = 7;
+}
+
+$f3->set('font_first', $font_first);
+$f3->set('font_last', $font_last);
+
 $f3->set('fontsFile','js/fonts.json');
 $f3->set('preloadedFont', 1);
 
@@ -31,7 +58,7 @@ $f3->route('GET /',
 
 		$f3->set('messagesCount', $message->count());
 		$f3->set('preloadedFooter', 1);
-		$f3->set('preloadedFont', rand(1, 5));
+		$f3->set('preloadedFont', rand($f3->get('font_first'), $f3->get('font_last')));
 
 		echo View::instance()->render('layout.html');
 	}
@@ -65,6 +92,15 @@ $f3->route('GET /mesaj/@message',
 			$f3->set('preloadedFrom', $message->from);
 			$f3->set('preloadedTo', $message->to);
 			$f3->set('preloadedMessage', str_replace("\n", '\n', $message->message));
+
+			$lang = 'ro';
+			if (isset($message->lang) && $message->lang === 'ru') {
+				$lang = 'ru';
+			}
+
+			$f3->set('lang', $lang);
+			$f3->set('LANGUAGE', $lang);
+			setcookie('lang', $lang, time() + (86400 * 365)); // One year
 		}
 		echo View::instance()->render('layout.html');
 	}
@@ -133,6 +169,7 @@ $f3->route('POST /mesaj',
 			$message->font = $_POST['font'];
 			$message->author = $f3->get('SESSION.author');
 			$message->id = getTextId($message->count() + 1);
+			$message->lang = $f3->get('lang');
 			$message->save();
 
 			echo json_encode(array('url' => $f3->get('URI_ROOT').'mesaj/'.$message->_id));
@@ -153,7 +190,7 @@ function toArray($object) {
   return $array;
 }
 
-$symbols = array(
+$symbols_ro = array(
   '-' => 'symbol-minus'
 , ',' => 'symbol-comma'
 , '.' => 'symbol-dot'
@@ -173,8 +210,61 @@ $symbols = array(
 , 'Ș' => 'accent-s-comma'
 , 'Ț' => 'accent-t-comma');
 
-function getFontData($fontName){
-	global $symbols;
+$symbols_ru = array(
+  '-' => 'symbol-minus'
+, ',' => 'symbol-comma'
+, '.' => 'symbol-dot'
+, '+' => 'symbol-plus'
+, '(' => 'symbol-left-parantheses'
+, ')' => 'symbol-right-parantheses'
+, '?' => 'symbol-question'
+, '!' => 'symbol-exclamation'
+, ':' => 'symbol-column'
+, '*' => 'symbol-star'
+, '=' => 'symbol-equal'
+, '>' => 'symbol-bigger'
+, '<' => 'symbol-smaller'
+, 'Б' => 'accent-b'
+, 'Ю' => 'accent-iu'
+, 'Ь' => 'accent-soft'
+, 'Ч' => 'accent-ch'
+, 'Ж' => 'accent-j'
+, 'Ъ' => 'accent-strong'
+, 'Д' => 'accent-d'
+, 'К' => 'accent-k'
+, 'Т' => 'accent-t'
+, 'Е' => 'accent-e'
+, 'Л' => 'accent-l'
+, 'Ц' => 'accent-ts'
+, 'Я' => 'accent-ea'
+, 'М' => 'accent-m'
+, 'У' => 'accent-u'
+, 'Ё' => 'accent-eo'
+, 'Н' => 'accent-n'
+, 'В' => 'accent-v'
+, 'Ф' => 'accent-f'
+, 'О' => 'accent-o'
+, 'З' => 'accent-z'
+, 'Г' => 'accent-g'
+, 'П' => 'accent-p'
+, 'Х' => 'accent-h'
+, 'Р' => 'accent-r'
+, 'И' => 'accent-i'
+, 'С' => 'accent-s'
+, 'А' => 'accent-a'
+, 'Й' => 'accent-i2'
+, 'Ш' => 'accent-sh'
+, 'Э' => 'accent-a2'
+, 'Ы' => 'accent-i3'
+, 'Щ' => 'accent-sh2'
+);
+
+function getFontData($fontName, $lang){
+	global $symbols_ro, $symbols_ru;
+	$symbols = $symbols_ro;
+	if ($lang === 'ru') {
+		$symbols = $symbols_ru;
+	}
 
 	$jsonData = file_get_contents('./fonts-server.json');
 	$json = json_decode($jsonData);
@@ -328,7 +418,11 @@ $f3->route('GET /imagine/@message',
 			$img->render();
 		} else {
 			// load symbols data
-			$fontData = getFontData($message->font);
+			$lang = 'ro';
+			if (isset($message->lang) && $message->lang === 'ru') {
+				$lang = 'ru';
+			}
+			$fontData = getFontData($message->font, $lang);
 			$messageText = strtr($message->message, $normalizeChars);
 			$image = getImage($fontData, $message->font, $messageText);
 			$image->render();

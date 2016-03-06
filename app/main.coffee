@@ -16,21 +16,24 @@ version = '?v=' + window.VERSION
   \u021A - t comma below
 ###
 
-cleanUpSpecialChars = (str)->
-  str = str
-    .replace(/[àáãäåă]/gi,"\u0102") # ă
-    .replace(/a\u0306/gi,"\u0102") # ă breve
-    .replace(/a\u030C/gi,"\u0102") # ă caron
-    .replace(/a\u0302/gi,"\u00C2") # â circumflex
-    .replace(/[îíǐĭìï]/gi,"\u00CE") # î
-    .replace(/[șşṣṩṧš]/gi,"\u0218") # ș
-    .replace(/s\u0326/gi,"\u0218") # ș comma
-    .replace(/s\u0327/gi,"\u0218") # ș cedilla
-    .replace(/[țƫţṭ]/gi,"\u021A") # ț
-    .replace(/t\u0326/gi,"\u021A") # ț comma
-    .replace(/t\u0327/gi,"\u021A") # ț cedilla
+cleanUpSpecialChars = (str)-> str
 
-  return str
+if window.LANGUAGE is 'ro'
+  cleanUpSpecialChars = (str)->
+    str = str
+      .replace(/[àáãäåă]/gi,"\u0102") # ă
+      .replace(/a\u0306/gi,"\u0102") # ă breve
+      .replace(/a\u030C/gi,"\u0102") # ă caron
+      .replace(/a\u0302/gi,"\u00C2") # â circumflex
+      .replace(/[îíǐĭìï]/gi,"\u00CE") # î
+      .replace(/[șşṣṩṧš]/gi,"\u0218") # ș
+      .replace(/s\u0326/gi,"\u0218") # ș comma
+      .replace(/s\u0327/gi,"\u0218") # ș cedilla
+      .replace(/[țƫţṭ]/gi,"\u021A") # ț
+      .replace(/t\u0326/gi,"\u021A") # ț comma
+      .replace(/t\u0327/gi,"\u021A") # ț cedilla
+
+    return str
 
 unescape = (str)->
   str = str.replace(/\&amp;/g, '&')
@@ -39,25 +42,77 @@ unescape = (str)->
   str = str.replace(/\&apos;/g,  "'")
   str = str.replace(/\&quot;/g,  '"')
 
-symbolEncodingMap =
-  '-': 'symbol-minus'
-  ',': 'symbol-comma'
-  '.': 'symbol-dot'
-  '+': 'symbol-plus'
-  '(': 'symbol-left-parantheses'
-  ')': 'symbol-right-parantheses'
-  '?': 'symbol-question'
-  '!': 'symbol-exclamation'
-  ':': 'symbol-column'
-  '*': 'symbol-star'
-  '=': 'symbol-equal'
-  '>': 'symbol-bigger'
-  '<': 'symbol-smaller'
-  '\u0102': 'accent-a-breve'
-  '\u00C2': 'accent-a-circumflex'
-  '\u00CE': 'accent-i-circumflex'
-  '\u0218': 'accent-s-comma'
-  '\u021A': 'accent-t-comma'
+symbolEncodingMap = {}
+
+if window.LANGUAGE is 'ro'
+  symbolEncodingMap =
+    '-': 'symbol-minus'
+    ',': 'symbol-comma'
+    '.': 'symbol-dot'
+    '+': 'symbol-plus'
+    '(': 'symbol-left-parantheses'
+    ')': 'symbol-right-parantheses'
+    '?': 'symbol-question'
+    '!': 'symbol-exclamation'
+    ':': 'symbol-column'
+    '*': 'symbol-star'
+    '=': 'symbol-equal'
+    '>': 'symbol-bigger'
+    '<': 'symbol-smaller'
+    '\u0102': 'accent-a-breve'
+    '\u00C2': 'accent-a-circumflex'
+    '\u00CE': 'accent-i-circumflex'
+    '\u0218': 'accent-s-comma'
+    '\u021A': 'accent-t-comma'
+
+else if window.LANGUAGE is 'ru'
+  symbolEncodingMap =
+    '-': 'symbol-minus'
+    ',': 'symbol-comma'
+    '.': 'symbol-dot'
+    '+': 'symbol-plus'
+    '(': 'symbol-left-parantheses'
+    ')': 'symbol-right-parantheses'
+    '?': 'symbol-question'
+    '!': 'symbol-exclamation'
+    ':': 'symbol-column'
+    '*': 'symbol-star'
+    '=': 'symbol-equal'
+    '>': 'symbol-bigger'
+    '<': 'symbol-smaller'
+    'Б': 'accent-b'
+    'Ю': 'accent-iu'
+    'Ь': 'accent-soft'
+    'Ч': 'accent-ch'
+    'Ж': 'accent-j'
+    'Ъ': 'accent-strong'
+    'Д': 'accent-d'
+    'К': 'accent-k'
+    'Т': 'accent-t'
+    'Е': 'accent-e'
+    'Л': 'accent-l'
+    'Ц': 'accent-ts'
+    'Я': 'accent-ea'
+    'М': 'accent-m'
+    'У': 'accent-u'
+    'Ё': 'accent-eo'
+    'Н': 'accent-n'
+    'В': 'accent-v'
+    'Ф': 'accent-f'
+    'О': 'accent-o'
+    'З': 'accent-z'
+    'Г': 'accent-g'
+    'П': 'accent-p'
+    'Х': 'accent-h'
+    'Р': 'accent-r'
+    'И': 'accent-i'
+    'С': 'accent-s'
+    'А': 'accent-a'
+    'Й': 'accent-i2'
+    'Ш': 'accent-sh'
+    'Э': 'accent-a2'
+    'Ы': 'accent-i3'
+    'Щ': 'accent-sh2'
 
 symbolDecodingMap = {}
 for symbol, encoding of symbolEncodingMap
@@ -313,11 +368,13 @@ controller =
     $message = $('#textarea')
 
     $(window).on 'click keyup', (ev)=>
-      return false if @state isnt 'WRITE'
-      return false if $(ev.target).closest('.message').length
+      return true if @state isnt 'WRITE'
+      return true if $(ev.target).closest('.message').length
 
       if not $message.is(':focus')
         @writeText $message.val(), -1
+
+      return true
 
     $message.on 'focus keyup paste cut', (ev)=>
       return false if @state isnt 'WRITE'
@@ -378,32 +435,34 @@ controller =
 listenForFontChange = (controller)->
   $wrappers = $('.content-wrapper')
 
-  $('body').on 'click', '[data-action="prev-font"]', =>
+  $('body').on 'click', '[data-action="prev-font"]', (ev)=>
+    ev.preventDefault()
     currentFont = +controller.fontGroup[controller.fontGroup.length - 1]
-    if currentFont is 1
-      newFontIndex = 5
+    if currentFont is window.FONT_FIRST
+      newFontIndex = window.FONT_LAST
     else
       newFontIndex = currentFont - 1
 
     newFont = "font#{newFontIndex}"
 
     $wrappers.filter("[data-type='#{newFont}']").addClass('active')
-    $('.action-content-inner').animate {left: "-#{(newFontIndex - 1) * 100}%"}, ->
+    $('.action-content-inner').animate {left: "-#{(newFontIndex - window.FONT_FIRST) * 100}%"}, ->
       $wrappers.not("[data-type='#{newFont}']").removeClass('active')
     controller.fontGroup = newFont
     controller.writeText()
 
-  $('body').on 'click', '[data-action="next-font"]', =>
+  $('body').on 'click', '[data-action="next-font"]', (ev)=>
+    ev.preventDefault()
     currentFont = +controller.fontGroup[controller.fontGroup.length - 1]
-    if currentFont is 5
-      newFontIndex = 1
+    if currentFont is window.FONT_LAST
+      newFontIndex = window.FONT_FIRST
     else
       newFontIndex = currentFont + 1
 
     newFont = "font#{newFontIndex}"
 
     $wrappers.filter("[data-type='#{newFont}']").addClass('active')
-    $('.action-content-inner').animate {left: "-#{(newFontIndex - 1) * 100}%"}, ->
+    $('.action-content-inner').animate {left: "-#{(newFontIndex - window.FONT_FIRST) * 100}%"}, ->
       $wrappers.not("[data-type='#{newFont}']").removeClass('active')
     controller.fontGroup = newFont
     controller.writeText()
@@ -537,7 +596,7 @@ $ ->
 
     # Preload other fonts
     fontSprites = []
-    for i in [1..5]
+    for i in [1..7]
       fontSprites.push "#{URI_ROOT}public/fonts/font#{i}/font-sprite.jpg#{version}"
     $.preload fontSprites, ->
       # console.log 'all fonts preloaded'

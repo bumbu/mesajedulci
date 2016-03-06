@@ -17,7 +17,7 @@
       echo '<meta property="og:url" content="'. $URI_ROOT .'mesaj/'. $messageId .'" />';
     }?>
   </head>
-  <body>
+  <body class="lang-<?php echo str_replace(',', '-', $LANGUAGE);?>">
     <!-- Google Tag Manager -->
     <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N9LVK8"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -38,8 +38,15 @@
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));</script>
         <div class="fb-like" data-href="https://www.facebook.com/CinciInimioare" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
-        <div class="messages-count">Mesaje trimise: <?php echo $messagesCount;?></div>
-        <div class="messages-invitation">Urmărește-ne pe facebook!</div>
+        <div class="messages-count"><?php echo $messages_sent; ?> <?php echo $messagesCount;?></div>
+        <div class="messages-invitation"><?php echo $follow_us; ?></div>
+      </div>
+      <div class="header__languages">
+        <a href="?lang=ro" class="header__language <?php echo ($LANGUAGE === 'ro,en' ? 'is-active' : '');?>">Ro</a>
+        <a href="?lang=ru" class="header__language <?php echo ($LANGUAGE === 'ru,en' ? 'is-active' : '');?>">Ru</a>
+        <div class="header__language-overlay overlay__component">
+          <div class="overlay__tooltip"><?php echo $help_language;?></div>
+        </div>
       </div>
       <div class="logo"><a href="<?php echo $URI_ROOT; ?>" data-action="try"><img src="<?php echo $URI_ROOT; ?>public/img/logo.jpg" alt="" width="179" height="91"></a></div>
     </div>
@@ -47,17 +54,17 @@
       <div class="message">
         <div class="message-body" id="message"></div>
         <div class="message-navigation">
-          <a href="prev" class="action action-left" data-action="prev-font" <?php echo $mode=='READ'?'style="display: none"':'' ?>>
+          <a href="#prev" class="action action-left" data-action="prev-font" <?php echo $mode=='READ'?'style="display: none"':'' ?>>
             <span class="icon icon-chevron-left"></span><br>
           </a>
-          <a href="next" class="action action-right" data-action="next-font" <?php echo $mode=='READ'?'style="display: none"':'' ?>>
+          <a href="#next" class="action action-right" data-action="next-font" <?php echo $mode=='READ'?'style="display: none"':'' ?>>
             <span class="icon icon-chevron-right"></span><br>
           </a>
-          <div class="message-navigation__overlay overlay__tooltip">2. Alegi fontul</div>
+          <div class="message-navigation__overlay overlay__tooltip"><?php echo $help_select;?></div>
         </div>
         <div class="message__overlay overlay__component">
-          <div class="message__tooltip overlay__tooltip">1. Scrii mesajul</div>
-          <button class="message__overlay-action overlay__tooltip" data-action="close-help">Încearcă</button>
+          <div class="message__tooltip overlay__tooltip"><?php echo $help_write;?></div>
+          <button class="message__overlay-action overlay__tooltip" data-action="close-help"><?php echo $help_try;?></button>
         </div>
       </div>
     </div>
@@ -68,7 +75,7 @@
         <?php echo $this->render(Base::instance()->get('footerEditor')); ?>
         <?php echo $this->render(Base::instance()->get('footerShare')); ?>
       </div>
-      <div class="footnote"><a href="https://www.facebook.com/CinciInimioare/" target="_blank">O inițiativă Zahăr Cinci Inimioare</a></div>
+      <div class="footnote"><a href="https://www.facebook.com/CinciInimioare/" target="_blank"><?php echo $initiative; ?></a></div>
       <div class="footer-clearfix"></div>
     </div>
     <div class="preload">
@@ -77,18 +84,21 @@
       </div>
     </div>
     <div class="overlay">
-      <button class="overlay__close icon icon-close" data-action="close-help"></button>
+      <!-- <button class="overlay__close icon icon-close" data-action="close-help"></button> -->
     </div>
 
     <script>
     var URI_ROOT = '<?php echo $URI_ROOT; ?>';
     var FONTS_DATA = '<?php echo $this->render(Base::instance()->get('fontsFile')); ?>';
     var PRELOADED_MESSAGE = "<?php echo $preloadedMessage; ?>";
-    var PRELOADED_MESSAGE_BACKUP = 'Alege-ți zahărul brun preferat și scrie un mesaj dulce celor dragi!';
+    var PRELOADED_MESSAGE_BACKUP = '<?php echo $default_message; ?>';
     var PRELOADED_FONT = <?php echo $preloadedFont; ?>;
     var MESSAGE_ID = '<?php echo isset($messageId) ? $messageId : ''; ?>';
     var VERSION = '<?php echo $VERSION; ?>';
     var MODE = '<?php echo $mode; ?>';
+    var LANGUAGE = '<?php echo explode(',', $LANGUAGE)[0];?>';
+    var FONT_FIRST = <?php echo $font_first;?>;
+    var FONT_LAST = <?php echo $font_last;?>;
     </script>
     <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.min.js"></script>
     <script src="<?php echo $URI_ROOT; ?>public/js/vendor/jquery.preload.min.js"></script>

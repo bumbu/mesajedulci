@@ -1,17 +1,13 @@
 <div class="footer-block">
   <div class="from-to">
     <?php if(isset($preloadedFrom) && $preloadedFrom){?>
-    <span class="text-from"><i>De la:</i><strong><?php echo $preloadedFrom;?></strong></span>
-    <?php }else{ ?>
-    <span class="text-from" style="display: none;"><i>De la:</i><strong></strong></span>
+    <span class="text-from"><i><?php echo $from; ?></i><strong><?php echo $preloadedFrom;?></strong></span>
     <?php } ?>
     <?php if(isset($preloadedTo) && $preloadedTo){?>
-    <span class="text-to"><i>Către:</i><strong><?php echo $preloadedTo;?></strong></span>
-    <?php }else{ ?>
-    <span class="text-to" style="display: none;"><i>Către:</i><strong></strong></span>
+    <span class="text-to"><i><?php echo $to; ?></i><strong><?php echo $preloadedTo;?></strong></span>
     <?php } ?>
   </div>
   <div class="try-out">
-    <a href="<?php echo $URI_ROOT; ?>" class="btn-action" data-action="try">Trimite un mesaj!</a>
+    <a href="<?php echo $URI_ROOT; ?>" class="btn-action" data-action="try"><?php echo $send_a_message;?></a>
   </div>
 </div>
