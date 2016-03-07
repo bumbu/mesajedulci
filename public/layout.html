@@ -42,8 +42,8 @@
         <div class="messages-invitation"><?php echo $follow_us; ?></div>
       </div>
       <div class="header__languages">
-        <a href="?lang=ro" class="header__language <?php echo ($LANGUAGE === 'ro,en' ? 'is-active' : '');?>">Ro</a>
-        <a href="?lang=ru" class="header__language <?php echo ($LANGUAGE === 'ru,en' ? 'is-active' : '');?>">Ru</a>
+        <a href="<?php echo $URI_ROOT; ?>/?lang=ro" class="header__language <?php echo ($LANGUAGE === 'ro,en' ? 'is-active' : '');?>">Ro</a>
+        <a href="<?php echo $URI_ROOT; ?>/?lang=ru" class="header__language <?php echo ($LANGUAGE === 'ru,en' ? 'is-active' : '');?>">Ru</a>
         <div class="header__language-overlay overlay__component">
           <div class="overlay__tooltip"><?php echo $help_language;?></div>
         </div>
