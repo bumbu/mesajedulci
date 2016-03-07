@@ -341,7 +341,8 @@ controller =
         newText += "<strong class='letter #{additionalClass}' data-index='#{index}'><i style='width: #{Math.floor symbolData.width}px; height: #{lineHeight}px;'><img style='width:#{maxCharacterWidth}px;margin-top: -#{symbolOffset}px' src='#{URI_ROOT}public/fonts/#{@fontGroup}/font-sprite.jpg#{version}'></i></strong>"
     newText += "</span>" # Last tag
 
-    @$text.html newText
+    @$text.find('span, br').remove()
+    @$text.prepend(newText)
 
     @firstRender = false
 
