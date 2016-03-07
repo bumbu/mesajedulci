@@ -377,9 +377,10 @@ controller =
       return true
 
     $message.on 'focus keyup paste cut', (ev)=>
-      return false if @state isnt 'WRITE'
+      return true if @state isnt 'WRITE'
 
       @writeText $message.val(), (if $message.get(0).selectionEnd? then $message.get(0).selectionEnd else $message.val().length)
+      return true
 
   listenSelect: ->
     $select = $('#font')
