@@ -570,7 +570,11 @@ listenForActionButtons = (controller)->
     image = ''
 
     if target is 'fb'
-      window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight)
+      if $(window).width() > 720
+        window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight)
+      else
+        window.open('http://m.facebook.com/sharer.php?u=' + url, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight)
+
     else if target is 'ok'
       window.open("http://www.odnoklassniki.ru/dk?st.cmd=addShare&st._surl=#{url}&title=#{title}")
 
