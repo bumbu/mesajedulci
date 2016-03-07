@@ -18,7 +18,7 @@ if (isset($_COOKIE['lang'])) {
 }
 if (isset($_GET['lang'])) {
 	$lang = $_GET['lang'];
-	setcookie('lang', $lang,time() + (86400 * 365)); // One year
+	setcookie('lang', $lang,time() + (86400 * 365), '/'); // One year
 }
 if ($lang !== 'ro' && $lang !== 'ru') {
 	$lang = 'ro';
@@ -94,13 +94,14 @@ $f3->route('GET /mesaj/@message',
 			$f3->set('preloadedMessage', str_replace("\n", '\n', $message->message));
 
 			$lang = 'ro';
-			if (isset($message->lang) && $message->lang === 'ru') {
+			// Fix wrongly submited texts
+			if ((isset($message->lang) && $message->lang === 'ru') || $message->font === 'font6' || $message->font === 'font7') {
 				$lang = 'ru';
 			}
 
 			$f3->set('lang', $lang);
 			$f3->set('LANGUAGE', $lang);
-			setcookie('lang', $lang, time() + (86400 * 365)); // One year
+			setcookie('lang', $lang, time() + (86400 * 365), '/'); // One year
 		}
 		echo View::instance()->render('layout.html');
 	}
@@ -163,13 +164,19 @@ $f3->route('POST /mesaj',
 		if (count($similarMessages) > 0){
 			echo json_encode(array('url' => $f3->get('URI_ROOT').'mesaj/'.$similarMessages[0]['_id']));
 		} else {
+			// Detect the language by font
+			$lang = 'ro';
+			if ($_POST['font'] === 'font6' || $_POST['font'] === 'font7') {
+				$lang = 'ru';
+			}
+
 			$message->message = mb_substr($_POST['message'], 0, 200);
 			$message->from = mb_substr($_POST['from'], 0, 30);
 			$message->to = mb_substr($_POST['to'], 0, 30);
 			$message->font = $_POST['font'];
 			$message->author = $f3->get('SESSION.author');
 			$message->id = getTextId($message->count() + 1);
-			$message->lang = $f3->get('lang');
+			$message->lang = $lang;
 			$message->save();
 
 			echo json_encode(array('url' => $f3->get('URI_ROOT').'mesaj/'.$message->_id));
