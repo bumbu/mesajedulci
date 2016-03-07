@@ -1,7 +1,7 @@
 <?php
 return array(
   'messages_sent'=>'Отправленых сообщений:',
-  'follow_us'=>'Подмишись на facebook!',
+  'follow_us'=>'Подпишись на facebook!',
   'default_message'=>'Напиши сладкое сообщение!',
   'from'=>'От:',
   'to'=>'Для:',
